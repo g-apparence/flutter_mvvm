@@ -1,3 +1,1 @@
-class MVVMModel {
-
-}
+class MVVMModel {}

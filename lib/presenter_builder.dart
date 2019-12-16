@@ -3,19 +3,16 @@ import 'package:mvvm_builder/component_builder.dart';
 import 'package:mvvm_builder/mvvm_model.dart';
 
 class PresenterInherited<T extends Presenter> extends InheritedWidget {
-
   final T _presenter;
 
-  PresenterInherited({Key key, T presenter, Widget child}) :
-      this._presenter = presenter,
-      super(key: key, child: child);
+  PresenterInherited({Key key, T presenter, Widget child})
+      : this._presenter = presenter,
+        super(key: key, child: child);
 
   T get presenter => _presenter;
 
-  static PresenterInherited<T> of<T extends Presenter>(BuildContext context) {
-    final type = _typeOf<PresenterInherited<T>>();
-    return context.inheritFromWidgetOfExactType(type) as PresenterInherited<T>;
-  }
+  static PresenterInherited<T> of<T extends Presenter>(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<PresenterInherited<T>>();
 
   static Type _typeOf<T>() => T;
 
@@ -29,12 +26,10 @@ class Presenter<T extends MVVMModel, I> {
   I _viewInterface;
   T _model;
 
-
   Presenter(T model, I viewInterface) {
     this._model = model;
     this._viewInterface = viewInterface;
   }
-
 
   /// called when view init
   Future onInit() => Future.value("Not implemented 1");
@@ -50,7 +45,7 @@ class Presenter<T extends MVVMModel, I> {
 
   /// call a method from your instance of [MVVMView]
   /// this method must be declared in interface extending MVVMView
-  I get viewInterface => this._viewInterface ;
+  I get viewInterface => this._viewInterface;
 
   /// call this to refresh the view
   refreshView() => _view.forceRefreshView();

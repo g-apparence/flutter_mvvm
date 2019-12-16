@@ -1,9 +1,9 @@
 name: mvvm_builder
-description: A widget builder to use MVVM design pattern
-version: 0.0.1
-author: apparence.io
+description: A widget builder to use MVVM design pattern. This plugin is just a facilitator to implement MVVM. Force Split code of view / component and help you manage component refresh state. You can use scoped_model to make model more reactive.
+version: 1.0.0
+author: Gautier <gautier@apparence.io>
 homepage: https://apparence.io
-#repository:
+repository: https://github.com/g-apparence/flutter_mvvm
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
