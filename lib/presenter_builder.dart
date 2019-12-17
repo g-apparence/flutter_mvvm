@@ -14,8 +14,6 @@ class PresenterInherited<T extends Presenter> extends InheritedWidget {
   static PresenterInherited<T> of<T extends Presenter>(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<PresenterInherited<T>>();
 
-  static Type _typeOf<T>() => T;
-
   @override
   bool updateShouldNotify(PresenterInherited oldWidget) => false;
 }
