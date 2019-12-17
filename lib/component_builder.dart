@@ -76,9 +76,9 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
   }
 
   @override
-  void dispose() async {
-    await this._presenter.onDestroy();
+  void dispose() {
     super.dispose();
+    this._presenter.onDestroy();
   }
 
   @override

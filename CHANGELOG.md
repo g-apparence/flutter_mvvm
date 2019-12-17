@@ -1,3 +1,6 @@
+## 1.0.3
+* _MVVMContentState now call super.dispose first
+
 ## 1.0.2
 * kotlin_version is now '1.3.0'
 
