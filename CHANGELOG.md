@@ -1,3 +1,6 @@
+## 1.0.4
+* fix pod swift version to => config.build_settings['SWIFT_VERSION'] = '4.2'
+
 ## 1.0.3
 * _MVVMContentState now call super.dispose first
 
