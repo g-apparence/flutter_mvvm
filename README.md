@@ -41,7 +41,7 @@ class TodoModel {
 ```
 class MyPresenter extends Presenter<MyViewModel> {
 
-  MyPresenter(MyViewModel model) : super(model);
+  MyPresenter(MyViewModel model, MyViewInterface view) : super(model, view);
 
   @override
   Future onInit() async {

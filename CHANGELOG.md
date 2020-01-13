@@ -1,3 +1,6 @@
+## 1.0.7+4
+* fix documentation 
+
 ## 1.0.7+3
 * fix kotlin version to 1.3.10
 
