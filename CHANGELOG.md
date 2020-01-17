@@ -1,3 +1,6 @@
+## 1.0.8+2
+* Presenter will no longer crash if call refreshView with a mockedView
+
 ## 1.0.8
 * adding presenter getter for MVVMPage in order to test
 * adding Key to MVVMPage

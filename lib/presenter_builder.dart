@@ -46,5 +46,10 @@ class Presenter<T extends MVVMModel, I> {
   I get viewInterface => this._viewInterface;
 
   /// call this to refresh the view
-  refreshView() => _view.forceRefreshView();
+  /// if you mock [I] this will have no effect when calling forceRefreshView
+  refreshView() {
+    if(_view != null) {
+      _view.forceRefreshView();
+    }
+  }
 }

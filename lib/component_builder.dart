@@ -11,8 +11,7 @@ typedef Widget MvvmContentBuilder<P extends Presenter, M extends MVVMModel>(
 /// PAGE WIDGET
 /// -----------------------------------------------
 /// Creates a new MVVM widget to split business logic easylly from rendering
-class MVVMPage<P extends Presenter, M extends MVVMModel>
-    extends StatelessWidget {
+class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget {
   final P _presenter;
   final Key key;
   final MvvmContentBuilder<P, M> _builder;
