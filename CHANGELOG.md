@@ -1,3 +1,7 @@
+## 1.0.8
+* adding presenter getter for MVVMPage in order to test
+* adding Key to MVVMPage
+
 ## 1.0.7+4
 * fix documentation 
 

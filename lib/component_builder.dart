@@ -14,13 +14,17 @@ typedef Widget MvvmContentBuilder<P extends Presenter, M extends MVVMModel>(
 class MVVMPage<P extends Presenter, M extends MVVMModel>
     extends StatelessWidget {
   final P _presenter;
+  final Key key;
   final MvvmContentBuilder<P, M> _builder;
 
   MVVMPage({
+    Key key,
     @required P presenter,
     @required MvvmContentBuilder<P, M> builder,
   })  : this._presenter = presenter,
-        this._builder = builder;
+        this.key = key,
+        this._builder = builder,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,9 @@ class MVVMPage<P extends Presenter, M extends MVVMModel>
       child: new MVVMContent<P, M>(builder: this._builder),
     );
   }
+
+  @visibleForTesting
+  P get presenter => _presenter;
 }
 
 /// -----------------------------------------------
