@@ -94,6 +94,8 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
 
   @override
   forceRefreshView() {
-    setState(() {});
+    if(this.mounted){
+      setState(() {});
+    }
   }
 }

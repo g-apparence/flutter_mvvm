@@ -1,3 +1,6 @@
+## 1.0.8+3
+* Calling setState now verify if object is mounted to avoid memory leaks
+
 ## 1.0.8+2
 * Presenter will no longer crash if call refreshView with a mockedView
 
