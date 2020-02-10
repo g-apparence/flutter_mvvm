@@ -1,3 +1,6 @@
+## 1.0.8+4
+* Add function to be called after view init in presenter
+
 ## 1.0.8+3
 * Calling setState now verify if object is mounted to avoid memory leaks
 

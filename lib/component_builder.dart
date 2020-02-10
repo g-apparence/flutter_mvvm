@@ -79,6 +79,7 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
     assert(this._presenter != null);
     _presenter.view = this;
     _presenter.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _presenter.afterViewInit());
   }
 
   @override

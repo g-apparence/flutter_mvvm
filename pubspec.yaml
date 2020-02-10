@@ -1,6 +1,6 @@
 name: mvvm_builder
 description: A widget builder to use MVVM design pattern. Force Split code of view / component and help you manage component refresh state.
-version: 1.0.8+3
+version: 1.0.8+4
 homepage: https://apparence.io
 repository: https://github.com/g-apparence/flutter_mvvm
 
