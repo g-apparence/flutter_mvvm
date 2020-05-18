@@ -1,3 +1,12 @@
+## 2.0.0+1
+* add a setter to presenter to change completely viewModel in order to use an external adapter
+* Breaking change - context is now MvvmContext, this holds the context and other flutter ressources
+* singleAnimControllerBuilder is now available in MVVMPageBuilder, you can use it to create an AnimationController which you can access in MvvmContext
+* multipleAnimControllerBuilder same as singleAnimController but to create multiple animations controllers
+* animListener is now available in MVVMPageBuilder. Handle animations start, reset... without refreshing entire page. Check related example.
+* fix a documentation error on creating presenter
+
+
 ## 1.0.8+4
 * Add function to be called after view init in presenter
 

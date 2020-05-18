@@ -8,7 +8,7 @@ MVVM = Model - View - ViewModel
 To use this plugin, add mvvm_builder as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).  
 
 ## Why use MVVM design patterns
-
+Widely used in Android and iOS native development. This pattern is one of the best to handle complex page with testable code.
 Implement a good design pattern can just simplify code, make more code testable, allow better performance...
 The idea is to split business logic from your view. Your view has to stay dumb, and this plugin will help you 
 to respect the pattern. 
@@ -39,12 +39,13 @@ class TodoModel {
 ### 3 - Create your Presenter
 
 ```
-class MyPresenter extends Presenter<MyViewModel> {
+class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
   MyPresenter(MyViewModel model, MyViewInterface view) : super(model, view);
 
   @override
   Future onInit() async {
+    // do initialisation stuff on your viewmodel here, loading... etc
     this.viewModel.title = "My todo list";
     this.viewModel.todoList = List();
     // init your view model here -- load from network etc ... 
@@ -112,10 +113,61 @@ class _MyAppState extends State<MyApp> implements MyViewInterface{
 }
 ```
 
-## Test
+### Test
 This pattern is really usefull for testing as it allows you to test business logic separately from rendering. 
 The another good thing of this pattern is the ability to test your view with many combination of viewModel settings 
 without the need of chaining actions before having the desired view state. 
 You can now test your view alone, presenter alone and test them together. 
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+
+### Use animations 
+MVVMPage can help you construct a simple Page with animations. Just provide a way to create an AnimationController and use the animation listener to handle animations. 
+```
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MVVMPage<MyPresenter, MyViewModel>(
+        builder: (mvvmContext, presenter, model) {
+          var animation = new CurvedAnimation(
+            parent: context.animationController,
+            curve: Curves.easeIn,
+          );
+          return Scaffold(
+            key: _scaffoldKey,
+            appBar: AppBar(title: Text(model.title)),
+            body: ListView.separated(
+              itemBuilder: (context, index) => InkWell(
+                onTap: () => presenter.onClickItem(index),
+                child: AnimatedBuilder(
+                  animation: animation,
+                  builder: (context, child) => Opacity(opacity: animation.value, child: child),
+                  child: ListTile(
+                    title: Text(model.todoList[index].title),
+                    subtitle: Text(model.todoList[index].subtitle),
+                  ),
+                ),
+              ),
+              separatorBuilder: (context, index) => Divider(height: 1) ,
+              itemCount: model.todoList.length
+            )
+          );
+        },
+        presenter: MyPresenter(new MyViewModel(), this),
+        singleAnimControllerBuilder: (tickerProvider) => AnimationController(vsync: tickerProvider, duration: Duration(seconds: 1)),
+        animListener: (context, presenter, model) {
+          if(model.fadeInAnimation) {
+            context.animationController
+              .forward()
+              .then((value) => presenter.onFadeInAnimationEnd());
+          }
+        },
+      )
+    );
+  }
+```
+singleAnimControllerBuilder : creates your animations controller.
+animListener : handle the state of your animations.
+
+To fire animListener simply call refreshAnimations from your presenter. Now you can handle animations state directly from your presenter. 

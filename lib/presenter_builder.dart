@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:mvvm_builder/component_builder.dart';
 import 'package:mvvm_builder/mvvm_model.dart';
 
+/// allows to defer build of presenter
+typedef Presenter<T,I> PresenterBuilder<T extends MVVMModel, I>(T model, I view);
+
+
+/// Wraps presenter inside a persistent Widget
 class PresenterInherited<T extends Presenter> extends InheritedWidget {
   final T _presenter;
 
@@ -17,6 +22,7 @@ class PresenterInherited<T extends Presenter> extends InheritedWidget {
   @override
   bool updateShouldNotify(PresenterInherited oldWidget) => false;
 }
+
 
 /// This class must be overriden to
 class Presenter<T extends MVVMModel, I> {
@@ -41,6 +47,9 @@ class Presenter<T extends MVVMModel, I> {
   /// get the viewModel from presenter
   T get viewModel => _model;
 
+  /// get a new viewModel in presenter
+  set model(T value) => _model = value;
+
   /// set the view reference to presenter
   set view(MVVMView view) => this._view = view;
 
@@ -48,11 +57,21 @@ class Presenter<T extends MVVMModel, I> {
   /// this method must be declared in interface extending MVVMView
   I get viewInterface => this._viewInterface;
 
+  set viewInterface(I value) => _viewInterface = value;
+
   /// call this to refresh the view
   /// if you mock [I] this will have no effect when calling forceRefreshView
   refreshView() {
     if(_view != null) {
       _view.forceRefreshView();
+    }
+  }
+
+  /// call this to refresh animations
+  /// this will start animations from your animation listener of MvvmBuilder
+  Future refreshAnimations() async {
+    if(_view != null) {
+      await _view.refreshAnimation();
     }
   }
 }
