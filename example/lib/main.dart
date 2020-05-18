@@ -3,48 +3,93 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
+import 'package:mvvm_builder/presenter_builder.dart';
 
-void main() => runApp(MyApp());
+final homePageBuilder = MyAppWithBuilder();
 
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+Route<dynamic> route(RouteSettings settings) {
+  print("...[call route] ${settings.name}");
+  switch (settings.name) {
+    case "/":
+      return MaterialPageRoute(builder: homePageBuilder.build);
+  }
 }
 
-class _MyAppState extends State<MyApp> implements MyViewInterface{
+
+void main() {
+  print("...[main]");
+  return runApp(
+   MaterialApp(
+     onGenerateRoute: route,
+   )
+  );
+}
+
+
+
+class MyAppWithBuilder extends StatelessWidget implements MyViewInterface {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final mvvmPageBuilder = MVVMPageBuilder<MyPresenter, MyViewModel>();
+
+  @override
+  Widget build(BuildContext context) {
+    return mvvmPageBuilder.build(
+      presenterBuilder: (context) => MyPresenter(new MyViewModel(), this),
+      key: ValueKey("page"),
+      builder: (context, presenter, model) {
+        return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(title: Text(model?.title ?? "")),
+          body: ListView.separated(
+            itemBuilder: (context, index) => InkWell(
+              onTap: () => presenter.onClickItem(index),
+              child: ListTile(
+                title: Text(model.todoList[index].title),
+                subtitle: Text(model.todoList[index].subtitle),
+              ),
+            ),
+            separatorBuilder: (context, index) => Divider(height: 1) ,
+            itemCount: model.todoList.length ?? 0
+          )
+        );
+      },
+    );
+  }
+
+  @override
+  void showMessage(String message) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
+  }
+}
+
+
+class MyApp extends StatelessWidget implements MyViewInterface {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MVVMPage<MyPresenter, MyViewModel>(
-        builder: (context, presenter, model) {
-          return Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(title: Text(model.title)),
-            body: ListView.separated(
-              itemBuilder: (context, index) => InkWell(
-                onTap: () => presenter.onClickItem(index),
-                child: ListTile(
-                  title: Text(model.todoList[index].title),
-                  subtitle: Text(model.todoList[index].subtitle),
-                ),
+    return MVVMPage<MyPresenter, MyViewModel>(
+      key: ValueKey("page"),
+      builder: (context, presenter, model) {
+        return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(title: Text(model?.title ?? "")),
+          body: ListView.separated(
+            itemBuilder: (context, index) => InkWell(
+              onTap: () => presenter.onClickItem(index),
+              child: ListTile(
+                title: Text(model.todoList[index].title),
+                subtitle: Text(model.todoList[index].subtitle),
               ),
-              separatorBuilder: (context, index) => Divider(height: 1) ,
-              itemCount: model.todoList.length
-            )
-          );
-        },
-        presenter: MyPresenter(new MyViewModel(), this),
-      )
+            ),
+            separatorBuilder: (context, index) => Divider(height: 1) ,
+            itemCount: model.todoList.length ?? 0
+          )
+        );
+      },
+      presenter: MyPresenter(new MyViewModel(), this),
     );
   }
 
@@ -63,12 +108,13 @@ abstract class MyViewInterface {
 
 class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
-  MyPresenter(MyViewModel model, MyViewInterface myView) : super(model, myView);
+  MyPresenter(MyViewModel model, MyViewInterface myView) : super(model, myView) {
+    this.viewModel.title = "My todo list";
+    this.viewModel.todoList = List();
+  }
 
   @override
   Future onInit() async {
-    this.viewModel.title = "My todo list";
-    this.viewModel.todoList = List();
     for(int i = 0; i < 15; i++) {
       this.viewModel.todoList.add(new TodoModel("TODO $i", "my task $i"));
     }

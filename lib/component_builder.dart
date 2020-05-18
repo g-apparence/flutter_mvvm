@@ -17,6 +17,54 @@ typedef AnimationController MvvmAnimationControllerBuilder(TickerProvider ticker
 /// builds a list of [AnimationController]
 typedef List<AnimationController> MvvmAnimationsControllerBuilder(TickerProvider tickerProvider);
 
+/// builds a presenter
+typedef P PresenterBuilder<P>(BuildContext context);
+
+
+
+/// -----------------------------------------------
+/// MVVMPageBuilder
+/// -----------------------------------------------
+/// Creates a static cached page from a builder method
+/// Prefer use this to keep presenter state from unwanted rebuild
+class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
+
+  PresenterInherited page;
+
+  Widget build({Key key,
+      @required BuildContext context,
+      @required PresenterBuilder presenterBuilder,
+      @required MvvmContentBuilder<P, M> builder,
+      MvvmAnimationListener<P, M> animListener,
+      MvvmAnimationControllerBuilder singleAnimControllerBuilder,
+      MvvmAnimationsControllerBuilder multipleAnimControllerBuilder
+  }) {
+    if(page == null) {
+      assert(builder != null);
+      var content;
+      if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
+        content = new MVVMContent<P, M>();
+      } else if (singleAnimControllerBuilder != null) {
+        content = new AnimatedMvvmContent<P, M>(
+          singleAnimController: singleAnimControllerBuilder,
+          animListener: animListener);
+      } else if (multipleAnimControllerBuilder != null) {
+        content = new MultipleAnimatedMvvmContent<P,M>(
+          multipleAnimController: multipleAnimControllerBuilder,
+          animListener: animListener);
+      }
+      page = PresenterInherited<P,M>(
+        presenter: presenterBuilder(context),
+        builder: builder,
+        child: content,
+      );
+    }
+    return page;
+  }
+}
+
+
+
 /// -----------------------------------------------
 /// PAGE WIDGET
 /// -----------------------------------------------
@@ -51,19 +99,19 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
     assert(this._builder != null);
     var content;
     if(this._singleAnimControllerBuilder == null && this._multipleAnimControllerBuilder == null) {
-      content = new MVVMContent<P, M>(builder: this._builder);
+      content = new MVVMContent<P, M>();
     } else if (this._singleAnimControllerBuilder != null) {
       content = new AnimatedMvvmContent<P, M>(
-        builder: this._builder,
         singleAnimController: _singleAnimControllerBuilder,
         animListener: _animListener);
     } else if (this._multipleAnimControllerBuilder != null) {
       content = new MultipleAnimatedMvvmContent<P,M>(
-        builder: this._builder,
-        multipleAnimController: _multipleAnimControllerBuilder);
+        multipleAnimController: _multipleAnimControllerBuilder,
+        animListener: _animListener);
     }
-    return PresenterInherited<P>(
+    return PresenterInherited<P,M>(
       presenter: _presenter,
+      builder: _builder,
       child: content,
     );
   }
@@ -88,43 +136,33 @@ abstract class MVVMView {
 /// -----------------------------------------------
 class MVVMContent<P extends Presenter, M extends MVVMModel> extends StatefulWidget {
 
-  final MvvmContentBuilder<P, M> _builder;
-
-  MvvmContentBuilder get builder => _builder;
-
-  MVVMContent({Key key, @required MvvmContentBuilder<P, M> builder})
-      : this._builder = builder,
-        super(key: key);
+  MVVMContent({Key key}) : super(key: key);
 
   @override
-  _MVVMContentState<P, M> createState() => _MVVMContentState<P, M>(_builder);
+  _MVVMContentState<P, M> createState() => _MVVMContentState<P, M>();
 }
 
 class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<MVVMContent> implements MVVMView {
 
-  P _presenter;
-  final MvvmContentBuilder<P, M> _builder;
-
-  _MVVMContentState(this._builder);
+  _MVVMContentState();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    this._presenter = PresenterInherited.of<P>(context).presenter;
-    assert(this._presenter != null);
-    _presenter.view = this;
-    _presenter.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _presenter.afterViewInit());
+    assert(presenter != null, "Presenter must be not null");
+    presenter.view = this;
+    presenter.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
   }
 
   @override
   void dispose() {
     super.dispose();
-    this._presenter.onDestroy();
+    presenter.onDestroy();
   }
 
   @override
-  Widget build(BuildContext context) => _builder(mvvmContext, _presenter, this._presenter.viewModel);
+  Widget build(BuildContext context) => builder(mvvmContext, presenter, this.presenter.viewModel);
 
   @override
   forceRefreshView() {
@@ -135,54 +173,13 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<
 
   MvvmContext get mvvmContext => MvvmContext(context);
 
+  P get presenter => PresenterInherited.of<P,M>(context).presenter;
+
+  MvvmContentBuilder<P, M> get builder => PresenterInherited.of<P,M>(context).builder;
+
   @override
   Future<void> refreshAnimation() => throw UnimplementedError();
 }
 
 
 
-
-/// -----------------------------------------------
-/// MULTIPLE ANIMATIONS CONTENT WIDGET
-/// -----------------------------------------------
-class MultipleAnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends MVVMContent {
-
-  final MvvmAnimationsControllerBuilder multipleAnimController;
-
-  MultipleAnimatedMvvmContent({
-    Key key,
-    @required MvvmContentBuilder<P, M> builder,
-    @required this.multipleAnimController,
-  }) : super(key: key, builder: builder);
-
-  @override
-  _MVVMMultipleTickerProviderContentState<P, M> createState() =>
-    _MVVMMultipleTickerProviderContentState<P, M>(_builder, this.multipleAnimController);
-}
-
-
-class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVVMModel> extends _MVVMContentState with TickerProviderStateMixin {
-
-  final MvvmAnimationsControllerBuilder animationControllerBuilder;
-  List<AnimationController> _controllers;
-
-  _MVVMMultipleTickerProviderContentState(MvvmContentBuilder<P, M> builder, this.animationControllerBuilder) : super(builder);
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _controllers = animationControllerBuilder(this);
-  }
-
-  @override
-  Widget build(BuildContext context) =>
-    _builder(MvvmContext(context, animationsControllers: _controllers), _presenter, this._presenter.viewModel);
-
-  @override
-  refreshAnimation() async {
-    // TODO: implement refreshAnimation
-    throw UnimplementedError();
-  }
-
-
-}

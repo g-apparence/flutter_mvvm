@@ -11,21 +11,18 @@ import 'mvvm_model.dart';
 /// -----------------------------------------------
 class AnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends StatefulWidget {
 
-  final MvvmContentBuilder<P, M> _builder;
   final MvvmAnimationControllerBuilder singleAnimController;
   final MvvmAnimationListener<P, M> animListener;
 
   AnimatedMvvmContent({
     Key key,
-    @required MvvmContentBuilder<P, M> builder,
     @required this.singleAnimController,
     this.animListener,
-  }) : this._builder = builder,
-      super(key: key);
+  }) : super(key: key);
 
   @override
   _MVVMSingleTickerProviderContentState<P, M> createState() =>
-    _MVVMSingleTickerProviderContentState<P, M>(_builder, this.singleAnimController, this.animListener);
+    _MVVMSingleTickerProviderContentState<P, M>(this.singleAnimController, this.animListener);
 }
 
 
@@ -34,16 +31,15 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
   P _presenter;
   final MvvmAnimationControllerBuilder animationControllerBuilder;
   final MvvmAnimationListener<P, M> animListener;
-  final MvvmContentBuilder<P, M> _builder;
   AnimationController _controller;
 
-  _MVVMSingleTickerProviderContentState(this._builder, this.animationControllerBuilder, this.animListener)
+  _MVVMSingleTickerProviderContentState(this.animationControllerBuilder, this.animListener)
     : super();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    this._presenter = PresenterInherited.of<P>(context).presenter;
+    this._presenter = PresenterInherited.of<P,M>(context).presenter;
     assert(this._presenter != null);
     _presenter.view = this;
     _presenter.onInit();
@@ -66,10 +62,11 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
 
   MvvmContext get mvvmContext => MvvmContext(context);
 
+  MvvmContentBuilder<P, M> get builder => PresenterInherited.of<P,M>(context).builder;
 
   @override
   Widget build(BuildContext context) =>
-    _builder(MvvmContext(context, animationController: _controller), _presenter, _presenter.viewModel);
+    builder(MvvmContext(context, animationController: _controller), _presenter, _presenter.viewModel);
 
   @override
   refreshAnimation() async {
@@ -118,4 +115,118 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
 //  refreshAnimation() async {
 //    animListener(MvvmContext(context, animationController: _controller), _presenter, _presenter.viewModel);
 //  }
+//}
+
+
+
+
+/// -----------------------------------------------
+/// MULTIPLE ANIMATIONS CONTENT WIDGET
+/// -----------------------------------------------
+class MultipleAnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends StatefulWidget {
+
+  final MvvmAnimationsControllerBuilder multipleAnimController;
+  final MvvmAnimationListener<P, M> animListener;
+
+  MultipleAnimatedMvvmContent({
+    Key key,
+    @required this.multipleAnimController,
+    this.animListener,
+  }) : super(key: key);
+
+  @override
+  _MVVMMultipleTickerProviderContentState<P, M> createState() =>
+    _MVVMMultipleTickerProviderContentState<P, M>(this.multipleAnimController, this.animListener);
+}
+
+
+class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVVMModel> extends State<MultipleAnimatedMvvmContent> with TickerProviderStateMixin implements MVVMView {
+
+  P _presenter;
+  final MvvmAnimationsControllerBuilder animationControllerBuilder;
+  final MvvmAnimationListener<P, M> animListener;
+  List<AnimationController> _controller;
+
+  _MVVMMultipleTickerProviderContentState(this.animationControllerBuilder, this.animListener)
+    : super();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    this._presenter = PresenterInherited.of<P,M>(context).presenter;
+    assert(this._presenter != null);
+    _presenter.view = this;
+    _presenter.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _presenter.afterViewInit());
+    _controller = animationControllerBuilder(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    this._presenter.onDestroy();
+  }
+
+  @override
+  forceRefreshView() {
+    if(this.mounted) {
+      setState(() {});
+    }
+  }
+
+  MvvmContext get mvvmContext => MvvmContext(context);
+
+  MvvmContentBuilder<P, M> get builder => PresenterInherited.of<P,M>(context).builder;
+
+  @override
+  Widget build(BuildContext context) =>
+    builder(MvvmContext(context, animationsControllers: _controller), _presenter, _presenter.viewModel);
+
+  @override
+  refreshAnimation() async {
+    animListener(MvvmContext(context, animationsControllers: _controller), _presenter, _presenter.viewModel);
+  }
+}
+
+
+//class MultipleAnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends MVVMContent {
+//
+//  final MvvmAnimationsControllerBuilder multipleAnimController;
+//
+//  MultipleAnimatedMvvmContent({
+//    Key key,
+//    @required MvvmContentBuilder<P, M> builder,
+//    @required this.multipleAnimController,
+//  }) : super(key: key, builder: builder);
+//
+//  @override
+//  _MVVMMultipleTickerProviderContentState<P, M> createState() =>
+//    _MVVMMultipleTickerProviderContentState<P, M>(_builder, this.multipleAnimController);
+//}
+//
+//
+//class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVVMModel> extends _MVVMContentState with TickerProviderStateMixin {
+//
+//  final MvvmAnimationsControllerBuilder animationControllerBuilder;
+//  List<AnimationController> _controllers;
+//
+//  _MVVMMultipleTickerProviderContentState(MvvmContentBuilder<P, M> builder, this.animationControllerBuilder) : super(builder);
+//
+//  @override
+//  void didChangeDependencies() {
+//    super.didChangeDependencies();
+//    _controllers = animationControllerBuilder(this);
+//  }
+//
+//  @override
+//  Widget build(BuildContext context) =>
+//    _builder(MvvmContext(context, animationsControllers: _controllers), _presenter, this._presenter.viewModel);
+//
+//  @override
+//  refreshAnimation() async {
+//    // TODO: implement refreshAnimation
+//    throw UnimplementedError();
+//  }
+//
+//
 //}

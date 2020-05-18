@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
+import 'package:mvvm_builder/presenter_builder.dart';
 
 void main() => runApp(MyApp());
 

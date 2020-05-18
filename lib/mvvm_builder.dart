@@ -8,7 +8,6 @@ import 'mvvm_model.dart';
 import 'presenter_builder.dart';
 
 export 'component_builder.dart';
-export 'presenter_builder.dart';
 export 'mvvm_model.dart';
 
 class MvvmBuilder {

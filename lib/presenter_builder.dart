@@ -7,20 +7,21 @@ typedef Presenter<T,I> PresenterBuilder<T extends MVVMModel, I>(T model, I view)
 
 
 /// Wraps presenter inside a persistent Widget
-class PresenterInherited<T extends Presenter> extends InheritedWidget {
+class PresenterInherited<T extends Presenter, M extends MVVMModel> extends InheritedWidget {
   final T _presenter;
+  final MvvmContentBuilder<T, M> builder;
 
-  PresenterInherited({Key key, T presenter, Widget child})
+  PresenterInherited({Key key, T presenter, Widget child, this.builder})
       : this._presenter = presenter,
         super(key: key, child: child);
 
   T get presenter => _presenter;
 
-  static PresenterInherited<T> of<T extends Presenter>(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<PresenterInherited<T>>();
+  static PresenterInherited<T,M> of<T extends Presenter, M extends MVVMModel>(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<PresenterInherited<T,M>>();
 
   @override
-  bool updateShouldNotify(PresenterInherited oldWidget) => false;
+  bool updateShouldNotify(PresenterInherited oldWidget) => true;
 }
 
 
