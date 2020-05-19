@@ -186,13 +186,12 @@ void main() {
 ```
 
 
-## Test
+# Test
 This pattern is really usefull for testing as it allows you to test business logic separately from rendering. 
 The another good thing of this pattern is the ability to test your view with many combination of viewModel settings 
 without the need of chaining actions before having the desired view state. 
 You can now test your view alone, presenter alone and test them together. 
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 
 ## Use animations 
@@ -263,3 +262,7 @@ singleAnimControllerBuilder : creates your animations controller.
 animListener : handle the state of your animations.
 
 To fire animListener simply call refreshAnimations from your presenter. Now you can handle animations state directly from your presenter. 
+
+
+# Final note 
+**Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.**
