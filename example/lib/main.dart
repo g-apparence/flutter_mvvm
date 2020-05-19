@@ -35,8 +35,9 @@ class MyAppWithBuilder extends StatelessWidget implements MyViewInterface {
   @override
   Widget build(BuildContext context) {
     return mvvmPageBuilder.build(
-      presenterBuilder: (context) => MyPresenter(new MyViewModel(), this),
+      context: context,
       key: ValueKey("page"),
+      presenterBuilder: (context) => MyPresenter(new MyViewModel(), this),
       builder: (context, presenter, model) {
         return Scaffold(
           key: _scaffoldKey,
