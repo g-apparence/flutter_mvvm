@@ -8,18 +8,15 @@ import 'package:mvvm_builder/presenter_builder.dart';
 void main() => runApp(MyApp());
 
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
 
-class _MyAppState extends State<MyApp> implements MyViewInterface{
+class MyApp extends StatelessWidget implements MyViewInterface{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final MyPresenter mPresenter = MyPresenter.create(null);
 
-  @override
-  void initState() {
-    super.initState();
+  MyApp() {
+    // must be called to be able to use [MyViewInterface] in our presenter
+    mPresenter.init(this);
   }
 
   @override
@@ -51,7 +48,7 @@ class _MyAppState extends State<MyApp> implements MyViewInterface{
             )
           );
         },
-        presenter: MyPresenter(new MyViewModel(), this),
+        presenter: mPresenter,
         singleAnimControllerBuilder: (tickerProvider) => AnimationController(vsync: tickerProvider, duration: Duration(seconds: 1)),
         animListener: (context, presenter, model) {
           if(model.fadeInAnimation) {
@@ -68,6 +65,7 @@ class _MyAppState extends State<MyApp> implements MyViewInterface{
   void showMessage(String message) {
     _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
   }
+
 }
 
 abstract class MyViewInterface {
@@ -80,6 +78,8 @@ abstract class MyViewInterface {
 class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
   MyPresenter(MyViewModel model, MyViewInterface myView) : super(model, myView);
+
+  factory MyPresenter.create(MyViewInterface myView) => MyPresenter(MyViewModel(), myView);
 
   @override
   Future onInit() async {

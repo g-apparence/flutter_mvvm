@@ -142,15 +142,20 @@ class MVVMContent<P extends Presenter, M extends MVVMModel> extends StatefulWidg
 
 class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<MVVMContent> implements MVVMView {
 
+  bool hasInit = false;
+
   _MVVMContentState();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     assert(presenter != null, "Presenter must be not null");
-    presenter.view = this;
-    presenter.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
+    if(!hasInit) {
+      presenter.view = this;
+      presenter.onInit();
+      WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
+    }
+    hasInit = true;
   }
 
   @override

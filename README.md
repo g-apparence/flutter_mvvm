@@ -198,11 +198,23 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## Use animations 
 MVVMPage can help you construct a simple Page with animations. Just provide a way to create an AnimationController and use the animation listener to handle animations. 
 ```
+class MyApp extends StatelessWidget implements MyViewInterface {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  
+  // prefer to create your presenter outside of build method to keep it's state safe
+  final MyPresenter mPresenter = MyPresenter.create(null);
+
+  MyApp() {
+    // must be called to be able to use [MyViewInterface] in our presenter
+    mPresenter.init(this);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MVVMPage<MyPresenter, MyViewModel>(
-        builder: (mvvmContext, presenter, model) {
+        builder: (context, presenter, model) {
           var animation = new CurvedAnimation(
             parent: context.animationController,
             curve: Curves.easeIn,
@@ -227,7 +239,7 @@ MVVMPage can help you construct a simple Page with animations. Just provide a wa
             )
           );
         },
-        presenter: MyPresenter(new MyViewModel(), this),
+        presenter: mPresenter, 
         singleAnimControllerBuilder: (tickerProvider) => AnimationController(vsync: tickerProvider, duration: Duration(seconds: 1)),
         animListener: (context, presenter, model) {
           if(model.fadeInAnimation) {
@@ -239,6 +251,13 @@ MVVMPage can help you construct a simple Page with animations. Just provide a wa
       )
     );
   }
+
+  @override
+  void showMessage(String message) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
+  }
+
+}
 ```
 singleAnimControllerBuilder : creates your animations controller.
 animListener : handle the state of your animations.

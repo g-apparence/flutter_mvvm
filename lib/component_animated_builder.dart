@@ -28,10 +28,10 @@ class AnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends Stat
 
 class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMModel> extends State<AnimatedMvvmContent> with SingleTickerProviderStateMixin implements MVVMView {
 
-  P _presenter;
   final MvvmAnimationControllerBuilder animationControllerBuilder;
   final MvvmAnimationListener<P, M> animListener;
   AnimationController _controller;
+  bool hasInit = false;
 
   _MVVMSingleTickerProviderContentState(this.animationControllerBuilder, this.animListener)
     : super();
@@ -39,18 +39,22 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    this._presenter = PresenterInherited.of<P,M>(context).presenter;
-    assert(this._presenter != null);
-    _presenter.view = this;
-    _presenter.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _presenter.afterViewInit());
-    _controller = animationControllerBuilder(this);
+    assert(this.presenter != null);
+    presenter.view = this;
+    if(!hasInit) {
+      presenter.onInit();
+      WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
+    }
+    if(_controller == null) {
+      _controller = animationControllerBuilder(this);
+    }
+    hasInit = true;
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    this._presenter.onDestroy();
+  void deactivate() {
+    this.presenter.onDestroy();
+    super.deactivate();
   }
 
   @override
@@ -60,17 +64,19 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
     }
   }
 
+  P get presenter => PresenterInherited.of<P,M>(context).presenter;
+
   MvvmContext get mvvmContext => MvvmContext(context);
 
   MvvmContentBuilder<P, M> get builder => PresenterInherited.of<P,M>(context).builder;
 
   @override
   Widget build(BuildContext context) =>
-    builder(MvvmContext(context, animationController: _controller), _presenter, _presenter.viewModel);
+    builder(MvvmContext(context, animationController: _controller), presenter, presenter.viewModel);
 
   @override
   refreshAnimation() async {
-    animListener(MvvmContext(context, animationController: _controller), _presenter, _presenter.viewModel);
+    animListener(MvvmContext(context, animationController: _controller), presenter, presenter.viewModel);
   }
 }
 
@@ -142,10 +148,10 @@ class MultipleAnimatedMvvmContent<P extends Presenter, M extends MVVMModel> exte
 
 class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVVMModel> extends State<MultipleAnimatedMvvmContent> with TickerProviderStateMixin implements MVVMView {
 
-  P _presenter;
   final MvvmAnimationsControllerBuilder animationControllerBuilder;
   final MvvmAnimationListener<P, M> animListener;
   List<AnimationController> _controller;
+  bool hasInit = false;
 
   _MVVMMultipleTickerProviderContentState(this.animationControllerBuilder, this.animListener)
     : super();
@@ -153,18 +159,22 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    this._presenter = PresenterInherited.of<P,M>(context).presenter;
-    assert(this._presenter != null);
-    _presenter.view = this;
-    _presenter.onInit();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _presenter.afterViewInit());
-    _controller = animationControllerBuilder(this);
+    assert(this.presenter != null);
+    if(!hasInit) {
+      presenter.view = this;
+      presenter.onInit();
+      WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
+    }
+    if(_controller == null) {
+      _controller = animationControllerBuilder(this);
+    }
+    hasInit = true;
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    this._presenter.onDestroy();
+  void deactivate() {
+    this.presenter.onDestroy();
+    super.deactivate();
   }
 
   @override
@@ -174,17 +184,19 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
     }
   }
 
+  P get presenter => PresenterInherited.of<P,M>(context).presenter;
+
   MvvmContext get mvvmContext => MvvmContext(context);
 
   MvvmContentBuilder<P, M> get builder => PresenterInherited.of<P,M>(context).builder;
 
   @override
   Widget build(BuildContext context) =>
-    builder(MvvmContext(context, animationsControllers: _controller), _presenter, _presenter.viewModel);
+    builder(MvvmContext(context, animationsControllers: _controller), presenter, presenter.viewModel);
 
   @override
   refreshAnimation() async {
-    animListener(MvvmContext(context, animationsControllers: _controller), _presenter, _presenter.viewModel);
+    animListener(MvvmContext(context, animationsControllers: _controller), presenter, presenter.viewModel);
   }
 }
 
