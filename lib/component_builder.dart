@@ -156,9 +156,9 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void deactivate() {
     presenter.onDestroy();
+    super.deactivate();
   }
 
   @override

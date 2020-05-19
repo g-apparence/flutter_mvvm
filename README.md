@@ -3,7 +3,7 @@
 mvvm_builder is a Flutter plugin to help you implement MVVM design pattern with flutter. 
 MVVM = Model - View - ViewModel
 
-## Installation
+# Installation
 
 To use this plugin, add mvvm_builder as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).  
 
@@ -14,14 +14,14 @@ The idea is to split business logic from your view. Your view has to stay dumb, 
 to respect the pattern. 
 
 
-## Usage
+# Usage
 
 1 - import MVVMPage Widget from package
 ```
 import 'package:mvvm_builder/mvvm_builder.dart';
 ```
 
-### 2 - Create your Model
+## 2 - Create your Model
 ```
 class MyViewModel extends MVVMModel {
   String title;
@@ -36,7 +36,7 @@ class TodoModel {
 ```
 
 
-### 3 - Create your Presenter
+## 3 - Create your Presenter
 
 ```
 class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
@@ -56,7 +56,7 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
   }
 }
 ```
-### 4 - define your view interface
+## 4 - define your view interface
 for example: 
 ```
 abstract class MyViewInterface {
@@ -67,8 +67,11 @@ abstract class MyViewInterface {
 ```
 
 
-### 5 - Create your Page
-You page must implement your view interface. For example :
+## 5 - Create your Page
+
+### Use directly MVVMPage
+You page must implement your view interface. 
+For example :
 ```
 class _MyAppState extends State<MyApp> implements MyViewInterface{
   
@@ -113,7 +116,77 @@ class _MyAppState extends State<MyApp> implements MyViewInterface{
 }
 ```
 
-### Test
+### Use a Mvvmbuilder
+Using a builder defer build and presenter creation until you actually need it. 
+This can be also usefull if you want to keep a page state in your memory. 
+**MVVMPageBuilder stores a version of your page in cache after first time it's build.**
+Ex: 
+```
+class MyAppWithBuilder extends StatelessWidget implements MyViewInterface {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final mvvmPageBuilder = MVVMPageBuilder<MyPresenter, MyViewModel>();
+
+  @override
+  Widget build(BuildContext context) {
+    return mvvmPageBuilder.build(
+      presenterBuilder: (context) => MyPresenter(new MyViewModel(), this),
+      key: ValueKey("page"),
+      builder: (context, presenter, model) {
+        return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(title: Text(model?.title ?? "")),
+          body: ListView.separated(
+            itemBuilder: (context, index) => InkWell(
+              onTap: () => presenter.onClickItem(index),
+              child: ListTile(
+                title: Text(model.todoList[index].title),
+                subtitle: Text(model.todoList[index].subtitle),
+              ),
+            ),
+            separatorBuilder: (context, index) => Divider(height: 1) ,
+            itemCount: model.todoList.length ?? 0
+          )
+        );
+      },
+    );
+  }
+
+  @override
+  void showMessage(String message) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
+  }
+}
+``` 
+## Application routes
+As said in previous section, builder can be usefull to keep a page state across rebuilds. 
+This only store the way you create a page.
+Ex: 
+```
+final homePageBuilder = MyAppWithBuilder();
+
+Route<dynamic> route(RouteSettings settings) {
+  print("...[call route] ${settings.name}");
+  switch (settings.name) {
+    case "/":
+      return MaterialPageRoute(builder: homePageBuilder.build);
+  }
+}
+
+
+void main() {
+  print("...[main]");
+  return runApp(
+   MaterialApp(
+     onGenerateRoute: route,
+   )
+  );
+}
+
+```
+
+
+## Test
 This pattern is really usefull for testing as it allows you to test business logic separately from rendering. 
 The another good thing of this pattern is the ability to test your view with many combination of viewModel settings 
 without the need of chaining actions before having the desired view state. 
@@ -122,7 +195,7 @@ You can now test your view alone, presenter alone and test them together.
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 
-### Use animations 
+## Use animations 
 MVVMPage can help you construct a simple Page with animations. Just provide a way to create an AnimationController and use the animation listener to handle animations. 
 ```
   @override
