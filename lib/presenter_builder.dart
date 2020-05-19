@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mvvm_builder/component_builder.dart';
 import 'package:mvvm_builder/mvvm_model.dart';
 
-/// allows to defer build of presenter
-typedef Presenter<T,I> PresenterBuilder<T extends MVVMModel, I>(T model, I view);
-
-
 /// Wraps presenter inside a persistent Widget
 class PresenterInherited<T extends Presenter, M extends MVVMModel> extends InheritedWidget {
   final T _presenter;

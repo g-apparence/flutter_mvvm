@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_builder/presenter_builder.dart';
-
+import 'presenter_builder.dart';
 import 'component_animated_builder.dart';
 import 'mvvm_context.dart';
 import 'mvvm_model.dart';
@@ -19,7 +18,6 @@ typedef List<AnimationController> MvvmAnimationsControllerBuilder(TickerProvider
 
 /// builds a presenter
 typedef P PresenterBuilder<P>(BuildContext context);
-
 
 
 /// -----------------------------------------------
