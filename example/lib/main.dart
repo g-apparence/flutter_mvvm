@@ -19,9 +19,7 @@ Route<dynamic> route(RouteSettings settings) {
 void main() {
   print("...[main]");
   return runApp(
-   MaterialApp(
-     onGenerateRoute: route,
-   )
+    MaterialApp(onGenerateRoute: route)
   );
 }
 

@@ -6,6 +6,7 @@ repository: https://github.com/g-apparence/flutter_mvvm
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.12.0 <2.0.0"
 
 dependencies:
   flutter:
@@ -15,11 +16,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
 flutter:
   plugin:
-    androidPackage: com.apparence.mvvm_builder
-    pluginClass: MvvmBuilderPlugin
+    platforms:
+      android:
+        package: com.apparence.mvvm_builder
+        pluginClass: MvvmBuilderPlugin
+      ios:
+        pluginClass: MvvmBuilderPlugin
+
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

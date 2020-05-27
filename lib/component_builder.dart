@@ -27,7 +27,7 @@ typedef P PresenterBuilder<P>(BuildContext context);
 /// Prefer use this to keep presenter state from unwanted rebuild
 class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
 
-  PresenterInherited page;
+  P presenter;
 
   Widget build({Key key,
       @required BuildContext context,
@@ -35,29 +35,31 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       @required MvvmContentBuilder<P, M> builder,
       MvvmAnimationListener<P, M> animListener,
       MvvmAnimationControllerBuilder singleAnimControllerBuilder,
-      MvvmAnimationsControllerBuilder multipleAnimControllerBuilder
+      MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
+      bool forceRebuild = false,
   }) {
-    if(page == null) {
-      assert(builder != null);
-      var content;
-      if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
-        content = new MVVMContent<P, M>();
-      } else if (singleAnimControllerBuilder != null) {
-        content = new AnimatedMvvmContent<P, M>(
-          singleAnimController: singleAnimControllerBuilder,
-          animListener: animListener);
-      } else if (multipleAnimControllerBuilder != null) {
-        content = new MultipleAnimatedMvvmContent<P,M>(
-          multipleAnimController: multipleAnimControllerBuilder,
-          animListener: animListener);
-      }
-      page = PresenterInherited<P,M>(
-        presenter: presenterBuilder(context),
-        builder: builder,
-        child: content,
-      );
+    if(presenter == null || forceRebuild) {
+      this.presenter = presenterBuilder(context);
     }
-    return page;
+    assert(builder != null);
+    var content;
+    if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
+      content = new MVVMContent<P, M>();
+    } else if (singleAnimControllerBuilder != null) {
+      content = new AnimatedMvvmContent<P, M>(
+        singleAnimController: singleAnimControllerBuilder,
+        animListener: animListener);
+    } else if (multipleAnimControllerBuilder != null) {
+      content = new MultipleAnimatedMvvmContent<P,M>(
+        multipleAnimController: multipleAnimControllerBuilder,
+        animListener: animListener);
+    }
+    return PresenterInherited<P,M>(
+      key: key,
+      presenter: presenter,
+      builder: builder,
+      child: content,
+    );
   }
 }
 

@@ -21,7 +21,7 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel> extends Inher
 }
 
 
-/// This class must be overriden to
+/// This class must be overriden too
 class Presenter<T extends MVVMModel, I> {
   MVVMView _view;
   I _viewInterface;

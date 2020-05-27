@@ -1,3 +1,6 @@
+## 2.0.0+2
+* code cleaning for tests
+
 ## 2.0.0+1
 * NEW - MVVMPageBuilder to delay build a MVVMPage and Presenter. You can use it with OnGenerateRouteMethods to keep a page state / presenters across rebuilds
 * add a setter to presenter to change completely viewModel in order to use an external adapter

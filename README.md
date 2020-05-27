@@ -118,7 +118,7 @@ class _MyAppState extends State<MyApp> implements MyViewInterface{
 
 ### Use a Mvvmbuilder
 Using a builder defer build and presenter creation until you actually need it. 
-This can be also usefull if you want to keep a page state in your memory. 
+This can be also usefull if you want to keep a page state in your memory. Prefer use this method to use this page within a route. 
 **MVVMPageBuilder stores a version of your page in cache after first time it's build.**
 Ex: 
 ```
