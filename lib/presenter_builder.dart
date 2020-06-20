@@ -24,9 +24,14 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel> extends Inher
 /// This class must be overriden too
 abstract class Presenter<T extends MVVMModel, I> {
   MVVMView _view;
+
+  /// Interface defining the exposed methods of the view
   I viewInterface;
+
+  /// Model containing the current state of the view
   T viewModel;
 
+  /// Container controlling the current state of the view
   Presenter(this.viewModel, this.viewInterface);
 
   /// called when view init
