@@ -39,7 +39,7 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(this.presenter != null);
+    assert(presenter != null);
     presenter.view = this;
     if(!hasInit) {
       presenter.onInit();
@@ -53,13 +53,13 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
 
   @override
   void deactivate() {
-    this.presenter.onDestroy();
+    presenter.onDestroy();
     super.deactivate();
   }
 
   @override
   void forceRefreshView() {
-    if(this.mounted) {
+    if(mounted) {
       setState(() {});
     }
   }
@@ -159,7 +159,7 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(this.presenter != null);
+    assert(presenter != null);
     if(!hasInit) {
       presenter.view = this;
       presenter.onInit();
@@ -173,13 +173,13 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
 
   @override
   void deactivate() {
-    this.presenter.onDestroy();
+    presenter.onDestroy();
     super.deactivate();
   }
 
   @override
   void forceRefreshView() {
-    if(this.mounted) {
+    if(mounted) {
       setState(() {});
     }
   }
