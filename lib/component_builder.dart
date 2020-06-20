@@ -41,23 +41,25 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
     assert(context != null, 'Missing context in PageBuilder');
     assert(presenterBuilder != null, 'Missing presenterBuilder in PageBuilder');
     assert(builder != null, 'Missing builder in PageBuilder');
-    
+    assert((singleAnimControllerBuilder != null || multipleAnimControllerBuilder != null) && animListener != null, 'An Animated page was requested, but no listener was given.');
+    assert(singleAnimControllerBuilder != null && multipleAnimControllerBuilder == null, 'Cannot have both a single and a multiple animation controller builder.');
+
     if(_presenter == null || forceRebuild) {
       _presenter = presenterBuilder(context);
     }
 
     Widget content;
 
-    if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
-      content = MVVMContent<P, M>();
+    if(multipleAnimControllerBuilder != null) {
+      content = MultipleAnimatedMvvmContent<P,M>(
+        multipleAnimController: multipleAnimControllerBuilder,
+        animListener: animListener);
     } else if (singleAnimControllerBuilder != null) {
       content = AnimatedMvvmContent<P, M>(
         singleAnimController: singleAnimControllerBuilder,
         animListener: animListener);
-    } else if (multipleAnimControllerBuilder != null) {
-      content = MultipleAnimatedMvvmContent<P,M>(
-        multipleAnimController: multipleAnimControllerBuilder,
-        animListener: animListener);
+    } else {
+      content = MVVMContent<P, M>();
     }
 
     return PresenterInherited<P,M>(
