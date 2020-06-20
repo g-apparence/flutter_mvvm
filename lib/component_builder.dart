@@ -5,19 +5,19 @@ import 'mvvm_context.dart';
 import 'mvvm_model.dart';
 
 /// builds a child for a [MVVMContent]
-typedef Widget MvvmContentBuilder<P extends Presenter, M extends MVVMModel>(MvvmContext context, P presenter, M model);
+typedef MvvmContentBuilder<P extends Presenter, M extends MVVMModel> = Widget Function(MvvmContext context, P presenter, M model);
 
 /// functions to handle animation state without refresh page
-typedef void MvvmAnimationListener<P extends Presenter, M extends MVVMModel>(MvvmContext context, P presenter, M model);
+typedef MvvmAnimationListener<P extends Presenter, M extends MVVMModel> = void Function(MvvmContext context, P presenter, M model);
 
 /// builds a single [AnimationController]
-typedef AnimationController MvvmAnimationControllerBuilder(TickerProvider tickerProvider);
+typedef MvvmAnimationControllerBuilder = AnimationController Function(TickerProvider tickerProvider);
 
 /// builds a list of [AnimationController]
-typedef List<AnimationController> MvvmAnimationsControllerBuilder(TickerProvider tickerProvider);
+typedef MvvmAnimationsControllerBuilder = List<AnimationController> Function(TickerProvider tickerProvider);
 
 /// builds a presenter
-typedef P PresenterBuilder<P>(BuildContext context);
+typedef PresenterBuilder<P> = P Function(BuildContext context);
 
 
 /// -----------------------------------------------
