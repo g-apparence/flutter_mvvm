@@ -39,7 +39,7 @@ abstract class Presenter<T extends MVVMModel, I> {
   void onDestroy() {}
 
   /// set the view reference to presenter
-  set view(MVVMView view) => this._view = view;
+  set view(MVVMView view) => _view = view;
 
   /// call this to refresh the view
   /// if you mock [I] this will have no effect when calling forceRefreshView
