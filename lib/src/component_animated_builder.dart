@@ -45,9 +45,7 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
     }
-    if(_controller == null) {
-      _controller = animationControllerBuilder(this);
-    }
+    _controller ??= animationControllerBuilder(this);
     hasInit = true;
   }
 
@@ -165,9 +163,7 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) => presenter.afterViewInit());
     }
-    if(_controller == null) {
-      _controller = animationControllerBuilder(this);
-    }
+    _controller ??= animationControllerBuilder(this);
     hasInit = true;
   }
 
