@@ -3,7 +3,8 @@ import 'package:mvvm_builder/component_builder.dart';
 import 'package:mvvm_builder/mvvm_model.dart';
 
 /// Wraps presenter inside a persistent Widget
-class PresenterInherited<T extends Presenter, M extends MVVMModel> extends InheritedWidget {
+class PresenterInherited<T extends Presenter, M extends MVVMModel>
+    extends InheritedWidget {
   /// Presenter coupled to the view built by builder
   final T presenter;
 
@@ -11,17 +12,22 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel> extends Inher
   final MvvmContentBuilder<T, M> builder;
 
   /// Wraps presenter inside a persistent Widget
-  const PresenterInherited({Key key, this.presenter, Widget child, this.builder})
-      : super(key: key, child: child);
+  const PresenterInherited({
+    Key key,
+    this.presenter,
+    Widget child,
+    this.builder,
+  }) : super(key: key, child: child);
 
   /// Find the closest PresenterInherited above the current widget
-  static PresenterInherited<T,M> of<T extends Presenter, M extends MVVMModel>(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<PresenterInherited<T,M>>();
+  static PresenterInherited<T, M> of<T extends Presenter, M extends MVVMModel>(
+    BuildContext context,
+  ) =>
+      context.dependOnInheritedWidgetOfExactType<PresenterInherited<T, M>>();
 
   @override
   bool updateShouldNotify(PresenterInherited oldWidget) => true;
 }
-
 
 /// This class must be overriden too
 abstract class Presenter<T extends MVVMModel, I> {
