@@ -4,12 +4,17 @@ import 'package:mvvm_builder/mvvm_model.dart';
 
 /// Wraps presenter inside a persistent Widget
 class PresenterInherited<T extends Presenter, M extends MVVMModel> extends InheritedWidget {
+  /// Presenter coupled to the view built by builder
   final T presenter;
+
+  /// Method used to build the view corresponding to the presenter
   final MvvmContentBuilder<T, M> builder;
 
+  /// Wraps presenter inside a persistent Widget
   PresenterInherited({Key key, this.presenter, Widget child, this.builder})
       : super(key: key, child: child);
 
+  /// Find the closest PresenterInherited above the current widget
   static PresenterInherited<T,M> of<T extends Presenter, M extends MVVMModel>(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<PresenterInherited<T,M>>();
 
