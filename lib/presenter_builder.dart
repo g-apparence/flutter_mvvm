@@ -11,7 +11,7 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel> extends Inher
   final MvvmContentBuilder<T, M> builder;
 
   /// Wraps presenter inside a persistent Widget
-  PresenterInherited({Key key, this.presenter, Widget child, this.builder})
+  const PresenterInherited({Key key, this.presenter, Widget child, this.builder})
       : super(key: key, child: child);
 
   /// Find the closest PresenterInherited above the current widget
