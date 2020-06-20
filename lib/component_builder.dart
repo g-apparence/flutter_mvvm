@@ -92,7 +92,7 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
   MVVMPage({
     Key key,
     @required P presenter,
-    MvvmContentBuilder<P, M> builder,
+    @required MvvmContentBuilder<P, M> builder,
     MvvmAnimationListener<P, M> animListener,
     MvvmAnimationControllerBuilder singleAnimControllerBuilder,
     MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
