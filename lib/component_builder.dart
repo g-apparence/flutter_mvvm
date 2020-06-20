@@ -38,11 +38,14 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
       bool forceRebuild = false,
   }) {
+    
     if(presenter == null || forceRebuild) {
       presenter = presenterBuilder(context);
     }
+
     assert(builder != null);
-    var content;
+    Widget content;
+
     if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
       content = MVVMContent<P, M>();
     } else if (singleAnimControllerBuilder != null) {
@@ -54,6 +57,7 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
         multipleAnimController: multipleAnimControllerBuilder,
         animListener: animListener);
     }
+
     return PresenterInherited<P,M>(
       key: key,
       presenter: presenter,
@@ -96,8 +100,10 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
+
     assert(_builder != null);
-    var content;
+    Widget content;
+
     if(_singleAnimControllerBuilder == null && _multipleAnimControllerBuilder == null) {
       content = MVVMContent<P, M>();
     } else if (_singleAnimControllerBuilder != null) {
@@ -109,6 +115,7 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
         multipleAnimController: _multipleAnimControllerBuilder,
         animListener: _animListener);
     }
+
     return PresenterInherited<P,M>(
       presenter: _presenter,
       builder: _builder,
@@ -125,7 +132,7 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
 /// -----------------------------------------------
 abstract class MVVMView {
   /// force to refresh all view
-  forceRefreshView();
+  void forceRefreshView();
 
   /// calls refresh animation state
   Future<void> refreshAnimation();
@@ -170,7 +177,7 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<
   Widget build(BuildContext context) => builder(mvvmContext, presenter, presenter.viewModel);
 
   @override
-  forceRefreshView() {
+  void forceRefreshView() {
     if(mounted) {
       setState(() {});
     }
