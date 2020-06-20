@@ -34,7 +34,7 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(presenter != null);
+    assert(presenter != null, 'No Presenter could be found in the tree');
     presenter.view = this;
     if(!hasInit) {
       presenter.onInit();
@@ -147,7 +147,7 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(presenter != null);
+    assert(presenter != null, 'No Presenter could be found in the tree');
     if(!hasInit) {
       presenter.view = this;
       presenter.onInit();
