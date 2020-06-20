@@ -58,7 +58,7 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
   }
 
   @override
-  forceRefreshView() {
+  void forceRefreshView() {
     if(this.mounted) {
       setState(() {});
     }
@@ -75,7 +75,7 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter, M extends MVVMM
     builder(MvvmContext(context, animationController: _controller), presenter, presenter.viewModel);
 
   @override
-  refreshAnimation() async {
+  Future<void> refreshAnimation() async {
     animListener(MvvmContext(context, animationController: _controller), presenter, presenter.viewModel);
   }
 }
@@ -178,7 +178,7 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
   }
 
   @override
-  forceRefreshView() {
+  void forceRefreshView() {
     if(this.mounted) {
       setState(() {});
     }
@@ -195,7 +195,7 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter, M extends MVV
     builder(MvvmContext(context, animationsControllers: _controller), presenter, presenter.viewModel);
 
   @override
-  refreshAnimation() async {
+  Future<void> refreshAnimation() async {
     animListener(MvvmContext(context, animationsControllers: _controller), presenter, presenter.viewModel);
   }
 }
