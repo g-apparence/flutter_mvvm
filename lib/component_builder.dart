@@ -39,7 +39,7 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       bool forceRebuild = false,
   }) {
     if(presenter == null || forceRebuild) {
-      this.presenter = presenterBuilder(context);
+      presenter = presenterBuilder(context);
     }
     assert(builder != null);
     var content;
@@ -96,15 +96,15 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    assert(this._builder != null);
+    assert(_builder != null);
     var content;
-    if(this._singleAnimControllerBuilder == null && this._multipleAnimControllerBuilder == null) {
+    if(_singleAnimControllerBuilder == null && _multipleAnimControllerBuilder == null) {
       content = MVVMContent<P, M>();
-    } else if (this._singleAnimControllerBuilder != null) {
+    } else if (_singleAnimControllerBuilder != null) {
       content = AnimatedMvvmContent<P, M>(
         singleAnimController: _singleAnimControllerBuilder,
         animListener: _animListener);
-    } else if (this._multipleAnimControllerBuilder != null) {
+    } else if (_multipleAnimControllerBuilder != null) {
       content = MultipleAnimatedMvvmContent<P,M>(
         multipleAnimController: _multipleAnimControllerBuilder,
         animListener: _animListener);
@@ -167,11 +167,11 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<
   }
 
   @override
-  Widget build(BuildContext context) => builder(mvvmContext, presenter, this.presenter.viewModel);
+  Widget build(BuildContext context) => builder(mvvmContext, presenter, presenter.viewModel);
 
   @override
   forceRefreshView() {
-    if(this.mounted) {
+    if(mounted) {
       setState(() {});
     }
   }
