@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
-import 'package:mvvm_builder/presenter_builder.dart';
 
 final homePageBuilder = MyAppWithBuilder();
 
