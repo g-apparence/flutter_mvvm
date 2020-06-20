@@ -32,11 +32,6 @@ class Presenter<T extends MVVMModel, I> {
     this._viewInterface = viewInterface;
   }
 
-  /// if you didn't put a viewInterface use this method before
-  init(I viewInterface) {
-    this.viewInterface = viewInterface;
-  }
-
   /// called when view init
   Future onInit() => Future.value("Not implemented 1");
 
