@@ -21,7 +21,16 @@ typedef PresenterBuilder<P extends Presenter> = P Function(BuildContext context)
 
 
 /// Creates a static cached page from a builder method
+/// 
 /// Prefer use this to keep presenter state from unwanted rebuild
+/// 
+/// This widget supports either zero, one, or multiple animation controllers
+/// * For none, **DO NOT** pass a value in animListener,
+///   singleAnimControllerBuilder and multipleAnimControllerBuilder
+/// * For one, **DO** pass a value in animListener and
+///   singleAnimControllerBuilder, **BUT NOT** in multipleAnimControllerBuilder
+/// * For multiple, **DO** pass a value in animListener and
+///   multipleAnimControllerBuilder, **BUT NOT** in singleAnimControllerBuilder
 class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
   P _presenter;
 
@@ -74,6 +83,14 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
 
 
 /// Creates a new MVVM widget to split business logic easily from rendering
+///
+/// This widget supports either zero, one, or multiple animation controllers
+/// * For none, **DO NOT** pass a value in animListener,
+///   singleAnimControllerBuilder and multipleAnimControllerBuilder
+/// * For one, **DO** pass a value in animListener and
+///   singleAnimControllerBuilder, **BUT NOT** in multipleAnimControllerBuilder
+/// * For multiple, **DO** pass a value in animListener and
+///   multipleAnimControllerBuilder, **BUT NOT** in singleAnimControllerBuilder
 class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget {
   final P _presenter;
   final MvvmContentBuilder<P, M> _builder;
@@ -86,9 +103,7 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
     @required P presenter,
     @required MvvmContentBuilder<P, M> builder,
     MvvmAnimationListener<P, M> animListener,
-    /// singleAnimControllerBuilder creates a single AnimationController inside the page
     MvvmAnimationControllerBuilder singleAnimControllerBuilder,
-    /// multipleAnimControllerBuilder creates a list of AnimationController inside the page
     MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
   }) : assert(presenter != null, 'Missing presenter in page'),
         this._presenter = presenter,
@@ -129,9 +144,7 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
   P get presenter => _presenter;
 }
 
-/// -----------------------------------------------
-/// VIEW interface
-/// -----------------------------------------------
+/// Base class for views to implement
 abstract class MVVMView {
   /// force to refresh all view
   void forceRefreshView();
@@ -140,9 +153,6 @@ abstract class MVVMView {
   Future<void> refreshAnimation();
 }
 
-/// -----------------------------------------------
-/// CONTENT WIDGET
-/// -----------------------------------------------
 class MVVMContent<P extends Presenter, M extends MVVMModel> extends StatefulWidget {
 
   const MVVMContent({Key key}) : super(key: key);
