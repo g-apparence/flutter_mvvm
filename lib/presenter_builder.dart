@@ -33,13 +33,13 @@ abstract class Presenter<T extends MVVMModel, I> {
   }
 
   /// called when view init
-  Future onInit() => Future.value("Not implemented 1");
+  void onInit() {}
 
   /// called when view has been drawn for the 1st time
-  Future afterViewInit() => Future.value("");
+  void afterViewInit() {}
 
   /// called when view is destroyed
-  Future onDestroy() => Future.value("Not implemented 2");
+  void onDestroy() {}
 
   /// get the viewModel from presenter
   T get viewModel => _model;
