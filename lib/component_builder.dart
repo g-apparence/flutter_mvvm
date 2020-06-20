@@ -89,7 +89,7 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
   final MvvmAnimationControllerBuilder _singleAnimControllerBuilder;
   final MvvmAnimationsControllerBuilder _multipleAnimControllerBuilder;
 
-  MVVMPage({
+  const MVVMPage({
     Key key,
     @required P presenter,
     @required MvvmContentBuilder<P, M> builder,
@@ -151,7 +151,7 @@ abstract class MVVMView {
 /// -----------------------------------------------
 class MVVMContent<P extends Presenter, M extends MVVMModel> extends StatefulWidget {
 
-  MVVMContent({Key key}) : super(key: key);
+  const MVVMContent({Key key}) : super(key: key);
 
   @override
   _MVVMContentState<P, M> createState() => _MVVMContentState<P, M>();
