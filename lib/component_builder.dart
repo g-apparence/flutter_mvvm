@@ -110,16 +110,16 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
 
     Widget content;
 
-    if(_singleAnimControllerBuilder == null && _multipleAnimControllerBuilder == null) {
-      content = MVVMContent<P, M>();
+    if(_multipleAnimControllerBuilder != null) {
+      content = MultipleAnimatedMvvmContent<P,M>(
+        multipleAnimController: _multipleAnimControllerBuilder,
+        animListener: _animListener);
     } else if (_singleAnimControllerBuilder != null) {
       content = AnimatedMvvmContent<P, M>(
         singleAnimController: _singleAnimControllerBuilder,
         animListener: _animListener);
-    } else if (_multipleAnimControllerBuilder != null) {
-      content = MultipleAnimatedMvvmContent<P,M>(
-        multipleAnimController: _multipleAnimControllerBuilder,
-        animListener: _animListener);
+    } else {
+      content = MVVMContent<P, M>();
     }
 
     return PresenterInherited<P,M>(
