@@ -37,12 +37,15 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
       bool forceRebuild = false,
   }) {
-
+    
+    assert(context != null, 'Missing context in PageBuilder');
+    assert(presenterBuilder != null, 'Missing presenterBuilder in PageBuilder')
+    assert(builder != null, 'Missing builder in PageBuilder');
+    
     if(_presenter == null || forceRebuild) {
       _presenter = presenterBuilder(context);
     }
 
-    assert(builder != null);
     Widget content;
 
     if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
