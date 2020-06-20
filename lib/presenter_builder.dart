@@ -24,13 +24,10 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel> extends Inher
 /// This class must be overriden too
 abstract class Presenter<T extends MVVMModel, I> {
   MVVMView _view;
-  I _viewInterface;
-  T _model;
+  I viewInterface;
+  T viewModel;
 
-  Presenter(T model, I viewInterface) {
-    this._model = model;
-    this._viewInterface = viewInterface;
-  }
+  Presenter(this.viewModel, this.viewInterface);
 
   /// called when view init
   void onInit() {}
@@ -41,20 +38,8 @@ abstract class Presenter<T extends MVVMModel, I> {
   /// called when view is destroyed
   void onDestroy() {}
 
-  /// get the viewModel from presenter
-  T get viewModel => _model;
-
-  /// get a new viewModel in presenter
-  set model(T value) => _model = value;
-
   /// set the view reference to presenter
   set view(MVVMView view) => this._view = view;
-
-  /// call a method from your instance of [MVVMView]
-  /// this method must be declared in interface extending MVVMView
-  I get viewInterface => this._viewInterface;
-
-  set viewInterface(I value) => _viewInterface = value;
 
   /// call this to refresh the view
   /// if you mock [I] this will have no effect when calling forceRefreshView
