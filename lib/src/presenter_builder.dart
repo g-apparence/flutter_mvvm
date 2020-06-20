@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_builder/component_builder.dart';
-import 'package:mvvm_builder/mvvm_model.dart';
+import 'component_builder.dart';
+import 'mvvm_model.dart';
 
 /// Wraps presenter inside a persistent Widget
 class PresenterInherited<T extends Presenter, M extends MVVMModel>

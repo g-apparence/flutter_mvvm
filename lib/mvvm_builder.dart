@@ -1,5 +1,5 @@
-export 'component_animated_builder.dart';
-export 'component_builder.dart';
-export 'mvvm_context.dart';
-export 'mvvm_model.dart';
-export 'presenter_builder.dart';
+export 'src/component_animated_builder.dart';
+export 'src/component_builder.dart';
+export 'src/mvvm_context.dart';
+export 'src/mvvm_model.dart';
+export 'src/presenter_builder.dart';

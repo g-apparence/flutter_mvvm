@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mvvm_builder/component_builder.dart';
-import 'package:mvvm_builder/presenter_builder.dart';
-import 'package:mvvm_builder/mvvm_model.dart';
+import 'package:mvvm_builder/mvvm_builder.dart';
 
 
 P getMvvmPagePresenter<P extends Presenter, M extends MVVMModel>(WidgetTester tester, Key key) {

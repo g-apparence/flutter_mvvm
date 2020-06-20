@@ -20,9 +20,6 @@ typedef MvvmAnimationsControllerBuilder = List<AnimationController> Function(Tic
 typedef PresenterBuilder<P extends Presenter> = P Function(BuildContext context);
 
 
-/// -----------------------------------------------
-/// MVVMPageBuilder
-/// -----------------------------------------------
 /// Creates a static cached page from a builder method
 /// Prefer use this to keep presenter state from unwanted rebuild
 class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
@@ -76,12 +73,7 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
 
 
 
-/// -----------------------------------------------
-/// PAGE WIDGET
-/// -----------------------------------------------
-/// Creates a new MVVM widget to split business logic easylly from rendering
-/// [singleAnimControllerBuilder] creates a single AnimationController inside the page
-/// [multipleAnimControllerBuilder] creates a list of AnimationController inside the page
+/// Creates a new MVVM widget to split business logic easily from rendering
 class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget {
   final P _presenter;
   final MvvmContentBuilder<P, M> _builder;
@@ -94,7 +86,9 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
     @required P presenter,
     @required MvvmContentBuilder<P, M> builder,
     MvvmAnimationListener<P, M> animListener,
+    /// singleAnimControllerBuilder creates a single AnimationController inside the page
     MvvmAnimationControllerBuilder singleAnimControllerBuilder,
+    /// multipleAnimControllerBuilder creates a list of AnimationController inside the page
     MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
   }) : assert(presenter != null, 'Missing presenter in page'),
         this._presenter = presenter,
