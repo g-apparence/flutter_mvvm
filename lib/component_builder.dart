@@ -44,13 +44,13 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
     assert(builder != null);
     var content;
     if(singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null) {
-      content = new MVVMContent<P, M>();
+      content = MVVMContent<P, M>();
     } else if (singleAnimControllerBuilder != null) {
-      content = new AnimatedMvvmContent<P, M>(
+      content = AnimatedMvvmContent<P, M>(
         singleAnimController: singleAnimControllerBuilder,
         animListener: animListener);
     } else if (multipleAnimControllerBuilder != null) {
-      content = new MultipleAnimatedMvvmContent<P,M>(
+      content = MultipleAnimatedMvvmContent<P,M>(
         multipleAnimController: multipleAnimControllerBuilder,
         animListener: animListener);
     }
@@ -99,13 +99,13 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
     assert(this._builder != null);
     var content;
     if(this._singleAnimControllerBuilder == null && this._multipleAnimControllerBuilder == null) {
-      content = new MVVMContent<P, M>();
+      content = MVVMContent<P, M>();
     } else if (this._singleAnimControllerBuilder != null) {
-      content = new AnimatedMvvmContent<P, M>(
+      content = AnimatedMvvmContent<P, M>(
         singleAnimController: _singleAnimControllerBuilder,
         animListener: _animListener);
     } else if (this._multipleAnimControllerBuilder != null) {
-      content = new MultipleAnimatedMvvmContent<P,M>(
+      content = MultipleAnimatedMvvmContent<P,M>(
         multipleAnimController: _multipleAnimControllerBuilder,
         animListener: _animListener);
     }

@@ -43,7 +43,7 @@ void main() {
       return page.presenter;
     }
 
-    var page = new MyMvvmPageWithBuilder();
+    var page = MyMvvmPageWithBuilder();
 
     testWidgets('create page, check ok', (WidgetTester tester) async {
       var app = MaterialApp(home: page);
