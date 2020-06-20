@@ -43,17 +43,9 @@ abstract class Presenter<T extends MVVMModel, I> {
 
   /// call this to refresh the view
   /// if you mock [I] this will have no effect when calling forceRefreshView
-  void refreshView() {
-    if(_view != null) {
-      _view.forceRefreshView();
-    }
-  }
+  void refreshView() => _view?.forceRefreshView();
 
   /// call this to refresh animations
   /// this will start animations from your animation listener of MvvmBuilder
-  Future<void> refreshAnimations() async {
-    if(_view != null) {
-      await _view.refreshAnimation();
-    }
-  }
+  Future<void> refreshAnimations() async => _view?.refreshAnimation();
 }
