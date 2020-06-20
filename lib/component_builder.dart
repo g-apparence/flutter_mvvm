@@ -39,7 +39,7 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
   }) {
     
     assert(context != null, 'Missing context in PageBuilder');
-    assert(presenterBuilder != null, 'Missing presenterBuilder in PageBuilder')
+    assert(presenterBuilder != null, 'Missing presenterBuilder in PageBuilder');
     assert(builder != null, 'Missing builder in PageBuilder');
     
     if(_presenter == null || forceRebuild) {
@@ -82,7 +82,6 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
 /// [multipleAnimControllerBuilder] creates a list of AnimationController inside the page
 class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget {
   final P _presenter;
-  final Key key;
   final MvvmContentBuilder<P, M> _builder;
   final MvvmAnimationListener<P, M> _animListener;
   final MvvmAnimationControllerBuilder _singleAnimControllerBuilder;
@@ -95,10 +94,13 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
     MvvmAnimationListener<P, M> animListener,
     MvvmAnimationControllerBuilder singleAnimControllerBuilder,
     MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
-  }) : this._presenter = presenter,
-        this.key = key,
+  }) : assert(presenter != null, 'Missing presenter in page'),
+        this._presenter = presenter,
+        assert(builder != null, 'Missing builder in Page'),
         this._builder = builder,
+        assert((singleAnimControllerBuilder != null || multipleAnimControllerBuilder != null) && animListener != null, 'An Animated page was requested, but no listener was given.'),
         this._animListener = animListener,
+        assert(singleAnimControllerBuilder != null && multipleAnimControllerBuilder == null, 'Cannot have both a single and a multiple animation controller builder.'),
         this._singleAnimControllerBuilder = singleAnimControllerBuilder,
         this._multipleAnimControllerBuilder = multipleAnimControllerBuilder,
         super(key: key);
@@ -106,7 +108,6 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
   @override
   Widget build(BuildContext context) {
 
-    assert(_builder != null);
     Widget content;
 
     if(_singleAnimControllerBuilder == null && _multipleAnimControllerBuilder == null) {
