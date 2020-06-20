@@ -17,7 +17,7 @@ typedef MvvmAnimationControllerBuilder = AnimationController Function(TickerProv
 typedef MvvmAnimationsControllerBuilder = List<AnimationController> Function(TickerProvider tickerProvider);
 
 /// builds a presenter
-typedef PresenterBuilder<P> = P Function(BuildContext context);
+typedef PresenterBuilder<P extends Presenter> = P Function(BuildContext context);
 
 
 /// -----------------------------------------------
@@ -38,7 +38,7 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
       bool forceRebuild = false,
   }) {
-    
+
     if(presenter == null || forceRebuild) {
       presenter = presenterBuilder(context);
     }
