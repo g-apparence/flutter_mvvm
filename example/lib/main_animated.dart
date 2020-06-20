@@ -3,7 +3,6 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
-import 'package:mvvm_builder/presenter_builder.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget implements MyViewInterface{
 
   MyApp() {
     // must be called to be able to use [MyViewInterface] in our presenter
-    mPresenter.init(this);
+    mPresenter.viewInterface = this;
   }
 
   @override
