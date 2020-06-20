@@ -9,7 +9,7 @@ import 'presenter_builder.dart';
 /// SINGLE ANIMATION CONTENT WIDGET
 /// should extends MVVMContent but dartlang extends Generics bug
 /// -----------------------------------------------
-class AnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends StatefulWidget {
+class AnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends MVVMContent {
 
   final MvvmAnimationControllerBuilder singleAnimController;
   final MvvmAnimationListener<P, M> animListener;
@@ -21,8 +21,8 @@ class AnimatedMvvmContent<P extends Presenter, M extends MVVMModel> extends Stat
   }) : super(key: key);
 
   @override
-  _MVVMSingleTickerProviderContentState<P, M> createState() =>
-    _MVVMSingleTickerProviderContentState<P, M>(this.singleAnimController, this.animListener);
+  State<MVVMContent> createState() =>
+    _MVVMSingleTickerProviderContentState<Presenter, MVVMModel>(this.singleAnimController, this.animListener);
 }
 
 

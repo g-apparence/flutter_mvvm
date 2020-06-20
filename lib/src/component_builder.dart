@@ -158,7 +158,7 @@ class MVVMContent<P extends Presenter, M extends MVVMModel> extends StatefulWidg
   const MVVMContent({Key key}) : super(key: key);
 
   @override
-  _MVVMContentState<P, M> createState() => _MVVMContentState<P, M>();
+  State<MVVMContent> createState() => _MVVMContentState<P, M>();
 }
 
 class _MVVMContentState<P extends Presenter, M extends MVVMModel> extends State<MVVMContent> implements MVVMView {
