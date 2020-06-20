@@ -26,8 +26,7 @@ typedef PresenterBuilder<P extends Presenter> = P Function(BuildContext context)
 /// Creates a static cached page from a builder method
 /// Prefer use this to keep presenter state from unwanted rebuild
 class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
-
-  P presenter;
+  P _presenter;
 
   Widget build({Key key,
       @required BuildContext context,
@@ -39,8 +38,8 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       bool forceRebuild = false,
   }) {
 
-    if(presenter == null || forceRebuild) {
-      presenter = presenterBuilder(context);
+    if(_presenter == null || forceRebuild) {
+      _presenter = presenterBuilder(context);
     }
 
     assert(builder != null);
@@ -60,11 +59,14 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
 
     return PresenterInherited<P,M>(
       key: key,
-      presenter: presenter,
+      presenter: _presenter,
       builder: builder,
       child: content,
     );
   }
+
+  @visibleForTesting
+  P get presenter => _presenter;
 }
 
 
