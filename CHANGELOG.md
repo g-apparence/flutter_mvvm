@@ -1,3 +1,14 @@
+## 2.1.0+1
+* code cleaning and comments
+* removed translations file
+* MVVM Model should never be instantiated alone.
+* You're never supposed to build a Presenter directly
+* Major change : OnInit, OnDestroy... are not async anymore
+* Pass it through dartfmt
+* The builder is required.
+* Exports cleaning
+
+
 ## 2.0.0+2
 * code cleaning for tests
 

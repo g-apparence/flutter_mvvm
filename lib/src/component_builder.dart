@@ -43,13 +43,13 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
       MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
       bool forceRebuild = false,
   }) {
-    
     assert(context != null, 'Missing context in PageBuilder');
     assert(presenterBuilder != null, 'Missing presenterBuilder in PageBuilder');
     assert(builder != null, 'Missing builder in PageBuilder');
-    assert((singleAnimControllerBuilder != null || multipleAnimControllerBuilder != null) && animListener != null, 'An Animated page was requested, but no listener was given.');
-    assert(singleAnimControllerBuilder != null && multipleAnimControllerBuilder == null, 'Cannot have both a single and a multiple animation controller builder.');
-
+    assert(((singleAnimControllerBuilder != null || multipleAnimControllerBuilder != null) && animListener != null)
+      || (singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null),
+      'An Animated page was requested, but no listener was given.');
+    assert(!(singleAnimControllerBuilder != null && multipleAnimControllerBuilder != null), 'Cannot have both a single and a multiple animation controller builder.');
     if(_presenter == null || forceRebuild) {
       _presenter = presenterBuilder(context);
     }
@@ -109,9 +109,11 @@ class MVVMPage<P extends Presenter, M extends MVVMModel> extends StatelessWidget
         this._presenter = presenter,
         assert(builder != null, 'Missing builder in Page'),
         this._builder = builder,
-        assert((singleAnimControllerBuilder != null || multipleAnimControllerBuilder != null) && animListener != null, 'An Animated page was requested, but no listener was given.'),
+        assert(((singleAnimControllerBuilder != null || multipleAnimControllerBuilder != null) && animListener != null)
+          || (singleAnimControllerBuilder == null && multipleAnimControllerBuilder == null),
+        'An Animated page was requested, but no listener was given.'),
         this._animListener = animListener,
-        assert(singleAnimControllerBuilder != null && multipleAnimControllerBuilder == null, 'Cannot have both a single and a multiple animation controller builder.'),
+        assert(!(singleAnimControllerBuilder != null && multipleAnimControllerBuilder != null), 'Cannot have both a single and a multiple animation controller builder.'),
         this._singleAnimControllerBuilder = singleAnimControllerBuilder,
         this._multipleAnimControllerBuilder = multipleAnimControllerBuilder,
         super(key: key);

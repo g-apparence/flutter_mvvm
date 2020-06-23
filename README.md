@@ -166,6 +166,7 @@ class MyAppWithBuilder extends StatelessWidget implements MyViewInterface {
 ## Application routes
 As said in previous section, builder can be usefull to keep a page state across rebuilds. 
 This only store the way you create a page.
+Prefer this method as it's easyer and much better. 
 Ex: 
 ```
 final homePageBuilder = MyAppWithBuilder();

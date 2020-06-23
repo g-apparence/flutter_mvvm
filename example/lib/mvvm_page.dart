@@ -23,7 +23,7 @@ class MyMvvmPage extends StatelessWidget implements MyViewInterface {
             ),
             separatorBuilder: (context, index) => Divider(height: 1) ,
             itemCount: model.todoList.length ?? 0
-          )
+          ),
         );
       },
       presenter: MyPresenter(new MyViewModel(), this),
