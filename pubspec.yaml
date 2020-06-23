@@ -16,14 +16,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.apparence.mvvm_builder
-        pluginClass: MvvmBuilderPlugin
-      ios:
-        pluginClass: MvvmBuilderPlugin
 
 
   # To add assets to your plugin package, add an assets section, like this:

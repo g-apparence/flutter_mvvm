@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_builder/component_builder.dart';
-import 'package:mvvm_builder/mvvm_model.dart';
-import 'package:mvvm_builder/presenter_builder.dart';
+import 'package:mvvm_builder/mvvm_builder.dart';
 
 class MyMvvmPage extends StatelessWidget implements MyViewInterface {
 

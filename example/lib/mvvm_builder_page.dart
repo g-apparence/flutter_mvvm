@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mvvm_builder/component_builder.dart';
+import 'package:mvvm_builder/mvvm_builder.dart';
 
 import 'mvvm_page.dart';
 
