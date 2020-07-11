@@ -1,3 +1,6 @@
+## 2.1.1+1
+* upgrade dartlang to 2.8.0
+
 ## 2.1.0+1
 * code cleaning and comments
 * removed translations file

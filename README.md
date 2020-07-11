@@ -1,8 +1,3 @@
-# This is just here to share the code.
-Please visit the original repository to get the latest updates.
-
-https://github.com/g-apparence/flutter_mvvm
-
 # mvvm_builder
 
 mvvm_builder is a Flutter plugin to help you implement MVVM design pattern with flutter. 
