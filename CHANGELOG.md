@@ -1,3 +1,7 @@
+## 2.1.2+1
+* Fix _MVVMSingleTickerProviderContentState which didn't recognize types correctly
+* Fix _MVVMMultipleTickerProviderContentState which didn't recognize types correctly
+
 ## 2.1.1+1
 * upgrade dartlang to 2.8.0
 

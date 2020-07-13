@@ -4,8 +4,22 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
 
-void main() => runApp(MyApp());
 
+Route<dynamic> route(RouteSettings settings) {
+  print("...[call route] ${settings.name}");
+//  switch (settings.name) {
+//    case "/":
+//      return MaterialPageRoute(builder: homePageBuilder.build);
+//  }
+}
+
+
+void main() {
+  print("...[main animated]");
+  return runApp(
+    MaterialApp(onGenerateRoute: route, home: MyApp())
+  );
+}
 
 
 class MyApp extends StatelessWidget implements MyViewInterface{
@@ -14,14 +28,14 @@ class MyApp extends StatelessWidget implements MyViewInterface{
   final MyPresenter mPresenter = MyPresenter.create(null);
 
   MyApp() {
-    // must be called to be able to use [MyViewInterface] in our presenter
+    /// must be called to be able to use [MyViewInterface] in our presenter
+    /// or simply use MvvmPageBuilder that handle this for you
     mPresenter.viewInterface = this;
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MVVMPage<MyPresenter, MyViewModel>(
+    return MVVMPage<MyPresenter, MyViewModel>(
         builder: (context, presenter, model) {
           var animation = new CurvedAnimation(
             parent: context.animationController,
@@ -37,8 +51,8 @@ class MyApp extends StatelessWidget implements MyViewInterface{
                   animation: animation,
                   builder: (context, child) => Opacity(opacity: animation.value, child: child),
                   child: ListTile(
-                    title: Text(model.todoList[index].title),
-                    subtitle: Text(model.todoList[index].subtitle),
+                    title: Text(model.todoList[index].title, style: TextStyle(color: Colors.black87),),
+                    subtitle: Text(model.todoList[index].subtitle, style: TextStyle(color: Colors.black87)),
                   ),
                 ),
               ),
@@ -56,8 +70,7 @@ class MyApp extends StatelessWidget implements MyViewInterface{
               .then((value) => presenter.onFadeInAnimationEnd());
           }
         },
-      )
-    );
+      );
   }
 
   @override
