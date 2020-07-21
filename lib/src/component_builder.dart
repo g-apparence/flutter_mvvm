@@ -193,8 +193,11 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
     if (!hasInit) {
       presenter.view = this;
       presenter.onInit();
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => presenter.afterViewInit());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context != null) {
+          presenter.afterViewInit();
+        }
+      });
     }
     hasInit = true;
   }
