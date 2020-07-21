@@ -1,3 +1,9 @@
+## 2.1.3+1
+* Fix _MVVMContentState check if context exists in post frame callback
+* Fix _MVVMSingleTickerProviderContentState check if context exists in post frame callback
+* Fix _MVVMMultipleTickerProviderContentState check if context exists in post frame callback
+
+
 ## 2.1.2+1
 * Fix _MVVMSingleTickerProviderContentState which didn't recognize types correctly
 * Fix _MVVMMultipleTickerProviderContentState which didn't recognize types correctly
