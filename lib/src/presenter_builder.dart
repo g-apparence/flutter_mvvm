@@ -61,4 +61,8 @@ abstract class Presenter<T extends MVVMModel, I> {
   /// call this to refresh animations
   /// this will start animations from your animation listener of MvvmBuilder
   Future<void> refreshAnimations() async => _view?.refreshAnimation();
+
+  /// call this to dispose animations
+  /// this will stop & dispose all animations
+  Future<void> disposeAnimations() async => _view?.disposeAnimation();
 }
