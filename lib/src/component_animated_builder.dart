@@ -140,6 +140,9 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
   @override
   void deactivate() {
     presenter.onDestroy();
+    
+    // Dispose all animations
+    this.disposeAnimation();
     super.deactivate();
   }
 
