@@ -1,3 +1,6 @@
+## 2.1.3+2
+* Fix dispose & stop all animations
+
 ## 2.1.3+1
 * Fix _MVVMContentState check if context exists in post frame callback
 * Fix _MVVMSingleTickerProviderContentState check if context exists in post frame callback

@@ -170,6 +170,9 @@ abstract class MVVMView {
 
   /// calls refresh animation state
   Future<void> refreshAnimation();
+
+  /// calls stop & dispose for each animation(s)
+  Future<void> disposeAnimation();
 }
 
 class MVVMContent<P extends Presenter, M extends MVVMModel>
@@ -228,4 +231,7 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
 
   @override
   Future<void> refreshAnimation() => throw UnimplementedError();
+
+  @override
+  Future<void> disposeAnimation() => throw UnimplementedError();
 }

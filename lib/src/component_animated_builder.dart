@@ -81,6 +81,14 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
   Future<void> refreshAnimation() async {
     animListener(mvvmContext, presenter, presenter.viewModel);
   }
+
+  @override
+  Future<void> disposeAnimation() async {
+    if (_controller != null) {
+      _controller.stop();
+      _controller.dispose();
+    }
+  }
 }
 
 /// -----------------------------------------------
@@ -132,6 +140,9 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
   @override
   void deactivate() {
     presenter.onDestroy();
+    
+    // Dispose all animations
+    this.disposeAnimation();
     super.deactivate();
   }
 
@@ -144,7 +155,8 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
 
   P get presenter => PresenterInherited.of<P, M>(context).presenter;
 
-  MvvmContext get mvvmContext => MvvmContext(context, animationsControllers: _controller);
+  MvvmContext get mvvmContext =>
+      MvvmContext(context, animationsControllers: _controller);
 
   MvvmContentBuilder<P, M> get builder =>
       PresenterInherited.of<P, M>(context).builder;
@@ -156,5 +168,15 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
   @override
   Future<void> refreshAnimation() async {
     animListener(mvvmContext, presenter, presenter.viewModel);
+  }
+
+  @override
+  Future<void> disposeAnimation() async {
+    if (_controller != null && _controller.length > 0) {
+      for (var controller in _controller) {
+        controller.stop();
+        controller.dispose();
+      }
+    }
   }
 }
