@@ -1,5 +1,8 @@
-## 2.1.3+2
+## 2.1.3+3
 * Fix dispose & stop all animations
+
+## 2.1.3+2
+* Fix animation get context with controller
 
 ## 2.1.3+1
 * Fix _MVVMContentState check if context exists in post frame callback

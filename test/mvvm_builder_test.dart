@@ -1,11 +1,6 @@
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
-
-
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import '../example/lib/mvvm_page.dart';
 import '../example/lib/mvvm_builder_page.dart';
 

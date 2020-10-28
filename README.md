@@ -91,19 +91,7 @@ class _MyAppState extends State<MyApp> implements MyViewInterface{
       home: MVVMPage<MyPresenter, MyViewModel>(
         builder: (context, presenter, model) {
           return Scaffold(
-            key: _scaffoldKey,
-            appBar: AppBar(title: Text(model.title)),
-            body: ListView.separated(
-              itemBuilder: (context, index) => InkWell(
-                onTap: () => presenter.onClickItem(index),
-                child: ListTile(
-                  title: Text(model.todoList[index].title),
-                  subtitle: Text(model.todoList[index].subtitle),
-                ),
-              ),
-              separatorBuilder: (context, index) => Divider(height: 1) ,
-              itemCount: model.todoList.length
-            )
+            // ...
           );
         },
         presenter: MyPresenter(new MyViewModel(), this),
@@ -126,29 +114,17 @@ Ex:
 ```
 class MyAppWithBuilder extends StatelessWidget implements MyViewInterface {
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  //...
   final mvvmPageBuilder = MVVMPageBuilder<MyPresenter, MyViewModel>();
 
   @override
   Widget build(BuildContext context) {
     return mvvmPageBuilder.build(
+      context: context,
       presenterBuilder: (context) => MyPresenter(new MyViewModel(), this),
-      key: ValueKey("page"),
       builder: (context, presenter, model) {
         return Scaffold(
-          key: _scaffoldKey,
-          appBar: AppBar(title: Text(model?.title ?? "")),
-          body: ListView.separated(
-            itemBuilder: (context, index) => InkWell(
-              onTap: () => presenter.onClickItem(index),
-              child: ListTile(
-                title: Text(model.todoList[index].title),
-                subtitle: Text(model.todoList[index].subtitle),
-              ),
-            ),
-            separatorBuilder: (context, index) => Divider(height: 1) ,
-            itemCount: model.todoList.length ?? 0
-          )
+            /** ... */
         );
       },
     );
