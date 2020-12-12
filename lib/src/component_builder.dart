@@ -193,8 +193,8 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
   void didChangeDependencies() {
     super.didChangeDependencies();
     assert(presenter != null, "Presenter must be not null");
+    presenter.view = this;
     if (!hasInit) {
-      presenter.view = this;
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context != null) {
@@ -209,6 +209,7 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
   void deactivate() {
     presenter.onDestroy();
     super.deactivate();
+    presenter.afterViewDestroyed();
   }
 
   @override

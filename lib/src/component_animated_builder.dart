@@ -55,7 +55,9 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
   @override
   void deactivate() {
     presenter.onDestroy();
+    this.disposeAnimation();
     super.deactivate();
+    presenter.afterViewDestroyed();
   }
 
   @override
@@ -124,8 +126,8 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
   void didChangeDependencies() {
     super.didChangeDependencies();
     assert(presenter != null, 'No Presenter could be found in the tree');
+    presenter.view = this;
     if (!hasInit) {
-      presenter.view = this;
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context != null) {
@@ -140,10 +142,10 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
   @override
   void deactivate() {
     presenter.onDestroy();
-    
     // Dispose all animations
     this.disposeAnimation();
     super.deactivate();
+    presenter.afterViewDestroyed();
   }
 
   @override

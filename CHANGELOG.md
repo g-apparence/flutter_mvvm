@@ -1,3 +1,8 @@
+## 2.1.4
+* Fix dispose singleTickerAnimation controller automatically
+* Fix reload view instance to presenter on didChangedependancy
+* add presenter.afterViewDestroyed() to destroy some stream or notifier after views are really destroyed
+
 ## 2.1.3+3
 * Fix dispose & stop all animations
 

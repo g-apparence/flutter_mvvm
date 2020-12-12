@@ -51,6 +51,9 @@ abstract class Presenter<T extends MVVMModel, I> {
   /// called when view is destroyed
   void onDestroy() {}
 
+  /// called after view is destroyed
+  void afterViewDestroyed() {}
+
   /// set the view reference to presenter
   set view(MVVMView view) => _view = view;
 
