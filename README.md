@@ -1,4 +1,4 @@
-https://img.shields.io/github/workflow/status/g-apparence/flutter_mvvm/Flutter%20CI
+![](https://img.shields.io/github/workflow/status/g-apparence/flutter_mvvm/Flutter%20CI)
 
 
 # mvvm_builder
