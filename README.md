@@ -1,4 +1,5 @@
-![mvvm builder explanations](https://apparence.io/media/48/mvp_image.jpeg)
+https://img.shields.io/github/workflow/status/g-apparence/flutter_mvvm/Flutter%20CI
+
 
 # mvvm_builder
 
@@ -19,12 +20,12 @@ to respect the pattern.
 # Usage
 
 1 - import MVVMPage Widget from package
-```
+```dart
 import 'package:mvvm_builder/mvvm_builder.dart';
 ```
 
 ## 2 - Create your Model
-```
+```dart
 class MyViewModel extends MVVMModel {
   String title;
   List<TodoModel> todoList;
@@ -40,7 +41,7 @@ class TodoModel {
 
 ## 3 - Create your Presenter
 
-```
+```dart
 class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
   MyPresenter(MyViewModel model, MyViewInterface view) : super(model, view);
@@ -60,7 +61,7 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 ```
 ## 4 - define your view interface
 for example: 
-```
+```dart
 abstract class MyViewInterface {
   
   void showMessage(String message);
@@ -74,7 +75,7 @@ abstract class MyViewInterface {
 ### Use directly MVVMPage
 You page must implement your view interface. 
 For example :
-```
+```dart
 class _MyAppState extends State<MyApp> implements MyViewInterface{
   
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
@@ -111,7 +112,7 @@ Using a builder defer build and presenter creation until you actually need it.
 This can be also usefull if you want to keep a page state in your memory. Prefer use this method to use this page within a route. 
 **MVVMPageBuilder stores a version of your page in cache after first time it's build.**
 Ex: 
-```
+```dart
 class MyAppWithBuilder extends StatelessWidget implements MyViewInterface {
 
   //...
@@ -141,7 +142,7 @@ As said in previous section, builder can be usefull to keep a page state across 
 This only store the way you create a page.
 Prefer this method as it's easyer and much better. 
 Ex: 
-```
+```dart
 final homePageBuilder = MyAppWithBuilder();
 
 Route<dynamic> route(RouteSettings settings) {
@@ -175,7 +176,7 @@ You can now test your view alone, presenter alone and test them together.
 
 ## Use animations 
 MVVMPage can help you construct a simple Page with animations. Just provide a way to create an AnimationController and use the animation listener to handle animations. 
-```
+```dart
 class MyApp extends StatelessWidget implements MyViewInterface {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
