@@ -41,6 +41,7 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
     assert(presenter != null, 'No Presenter could be found in the tree');
     presenter.view = this;
     if (!hasInit) {
+      hasInit = true;
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context != null) {
@@ -49,7 +50,12 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
       });
     }
     _controller ??= widget.singleAnimController(this);
-    hasInit = true;
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    hasInit = false;
   }
 
   @override
@@ -128,6 +134,7 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
     assert(presenter != null, 'No Presenter could be found in the tree');
     presenter.view = this;
     if (!hasInit) {
+      hasInit = true;
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context != null) {
@@ -136,7 +143,13 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
       });
     }
     _controller ??= widget.multipleAnimController(this);
-    hasInit = true;
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    presenter.onInit();
+    hasInit = false;
   }
 
   @override

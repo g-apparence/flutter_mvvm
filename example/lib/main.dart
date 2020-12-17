@@ -113,6 +113,7 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
   @override
   Future onInit() async {
+    this.viewModel.todoList = List();
     for(int i = 0; i < 15; i++) {
       this.viewModel.todoList.add(new TodoModel("TODO $i", "my task $i"));
     }

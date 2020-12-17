@@ -187,7 +187,9 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
     extends State<MVVMContent> implements MVVMView {
   bool hasInit = false;
 
-  _MVVMContentState();
+  _MVVMContentState() {
+    print("_MVVMContentState");
+  }
 
   @override
   void didChangeDependencies() {
@@ -195,6 +197,7 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
     assert(presenter != null, "Presenter must be not null");
     presenter.view = this;
     if (!hasInit) {
+      hasInit = true;
       presenter.onInit();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context != null) {
@@ -202,7 +205,12 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
         }
       });
     }
-    hasInit = true;
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    hasInit = false;
   }
 
   @override
@@ -210,6 +218,12 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
     presenter.onDestroy();
     super.deactivate();
     presenter.afterViewDestroyed();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

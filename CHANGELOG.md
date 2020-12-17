@@ -1,3 +1,6 @@
+## 2.1.5
+* reassemble reset OnInit state to false for presenter
+
 ## 2.1.4
 * Fix dispose singleTickerAnimation controller automatically
 * Fix reload view instance to presenter on didChangedependancy
