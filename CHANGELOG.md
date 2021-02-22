@@ -1,3 +1,6 @@
+# 3.0.0-null.safety
+* migration of dart (null-safety)
+
 ## 2.1.5
 * reassemble reset OnInit state to false for presenter
 
