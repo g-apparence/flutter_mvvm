@@ -11,12 +11,12 @@ import 'presenter_builder.dart';
 /// -----------------------------------------------
 class AnimatedMvvmContent<P extends Presenter, M extends MVVMModel>
     extends MVVMContent {
-  final MvvmAnimationControllerBuilder singleAnimController;
-  final MvvmAnimationListener<P, M> animListener;
+  final MvvmAnimationControllerBuilder? singleAnimController;
+  final MvvmAnimationListener<P, M>? animListener;
 
   AnimatedMvvmContent({
-    Key key,
-    @required this.singleAnimController,
+    Key? key,
+    required this.singleAnimController,
     this.animListener,
   }) : super(key: key);
 
@@ -29,27 +29,24 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
         M extends MVVMModel> extends State<AnimatedMvvmContent>
     with SingleTickerProviderStateMixin
     implements MVVMView {
-  AnimationController _controller;
+  AnimationController? _controller;
   bool hasInit = false;
-  final MvvmAnimationListener<P, M> animListener;
+  final MvvmAnimationListener<P, M>? animListener;
 
   _MVVMSingleTickerProviderContentState(this.animListener);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(presenter != null, 'No Presenter could be found in the tree');
     presenter.view = this;
     if (!hasInit) {
       hasInit = true;
       presenter.onInit();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context != null) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
           presenter.afterViewInit();
-        }
       });
     }
-    _controller ??= widget.singleAnimController(this);
+    _controller ??= widget.singleAnimController!(this);
   }
 
   @override
@@ -73,28 +70,28 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
     }
   }
 
-  P get presenter => PresenterInherited.of<P, M>(context).presenter;
+  P get presenter => PresenterInherited.of<P, M>(context)!.presenter;
 
   MvvmContext get mvvmContext =>
       MvvmContext(context, animationController: _controller);
 
-  MvvmContentBuilder<P, M> get builder =>
-      PresenterInherited.of<P, M>(context).builder;
+  MvvmContentBuilder<P, M>? get builder =>
+      PresenterInherited.of<P, M>(context)!.builder;
 
   @override
   Widget build(BuildContext context) =>
-      builder(mvvmContext, presenter, presenter.viewModel);
+      builder!(mvvmContext, presenter, presenter.viewModel as M);
 
   @override
   Future<void> refreshAnimation() async {
-    animListener(mvvmContext, presenter, presenter.viewModel);
+    animListener!(mvvmContext, presenter, presenter.viewModel as M);
   }
 
   @override
   Future<void> disposeAnimation() async {
     if (_controller != null) {
-      _controller.stop();
-      _controller.dispose();
+      _controller!.stop();
+      _controller!.dispose();
     }
   }
 }
@@ -104,12 +101,12 @@ class _MVVMSingleTickerProviderContentState<P extends Presenter,
 /// -----------------------------------------------
 class MultipleAnimatedMvvmContent<P extends Presenter, M extends MVVMModel>
     extends StatefulWidget {
-  final MvvmAnimationsControllerBuilder multipleAnimController;
-  final MvvmAnimationListener<P, M> animListener;
+  final MvvmAnimationsControllerBuilder? multipleAnimController;
+  final MvvmAnimationListener<P, M>? animListener;
 
   MultipleAnimatedMvvmContent({
-    Key key,
-    @required this.multipleAnimController,
+    Key? key,
+    required this.multipleAnimController,
     this.animListener,
   }) : super(key: key);
 
@@ -122,27 +119,24 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
         M extends MVVMModel> extends State<MultipleAnimatedMvvmContent>
     with TickerProviderStateMixin
     implements MVVMView {
-  List<AnimationController> _controller;
+  List<AnimationController>? _controller;
   bool hasInit = false;
-  final MvvmAnimationListener<P, M> animListener;
+  final MvvmAnimationListener<P, M>? animListener;
 
   _MVVMMultipleTickerProviderContentState(this.animListener);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(presenter != null, 'No Presenter could be found in the tree');
     presenter.view = this;
     if (!hasInit) {
       hasInit = true;
       presenter.onInit();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context != null) {
-          presenter.afterViewInit();
-        }
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        presenter.afterViewInit();
       });
     }
-    _controller ??= widget.multipleAnimController(this);
+    _controller ??= widget.multipleAnimController!(this);
   }
 
   @override
@@ -168,27 +162,27 @@ class _MVVMMultipleTickerProviderContentState<P extends Presenter,
     }
   }
 
-  P get presenter => PresenterInherited.of<P, M>(context).presenter;
+  P get presenter => PresenterInherited.of<P, M>(context)!.presenter;
 
   MvvmContext get mvvmContext =>
       MvvmContext(context, animationsControllers: _controller);
 
-  MvvmContentBuilder<P, M> get builder =>
-      PresenterInherited.of<P, M>(context).builder;
+  MvvmContentBuilder<P, M>? get builder =>
+      PresenterInherited.of<P, M>(context)!.builder;
 
   @override
   Widget build(BuildContext context) =>
-      builder(mvvmContext, presenter, presenter.viewModel);
+      builder!(mvvmContext, presenter, presenter.viewModel as M);
 
   @override
   Future<void> refreshAnimation() async {
-    animListener(mvvmContext, presenter, presenter.viewModel);
+    animListener!(mvvmContext, presenter, presenter.viewModel as M);
   }
 
   @override
   Future<void> disposeAnimation() async {
-    if (_controller != null && _controller.length > 0) {
-      for (var controller in _controller) {
+    if (_controller != null && _controller!.length > 0) {
+      for (var controller in _controller!) {
         controller.stop();
         controller.dispose();
       }

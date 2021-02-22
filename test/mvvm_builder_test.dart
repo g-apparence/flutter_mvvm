@@ -24,7 +24,7 @@ void main() {
       expect(find.text("My todo list"), findsOneWidget);
       expect(find.text("my task 0"), findsOneWidget);
       expect(find.text("my task 5"), findsOneWidget);
-      expect(presenter.viewModel.todoList.length, 15);
+      expect(presenter.viewModel.todoList?.length, 15);
       expect(presenter, isNotNull);
     });
 
@@ -32,7 +32,7 @@ void main() {
 
   group('Mvvm page using builder', () {
 
-    MyPresenter getPresenter() {
+    MyPresenter? getPresenter() {
       var pageFinder = find.byKey(ValueKey("page"));
       var page = pageFinder.evaluate().first.widget as PresenterInherited<MyPresenter, MyViewModel>;
       return page.presenter;
@@ -44,12 +44,12 @@ void main() {
       var app = MaterialApp(home: page);
       await tester.pumpWidget(app);
       await tester.pumpAndSettle(Duration(seconds: 1));
-      var presenter = getPresenter();
+      var presenter = getPresenter()!;
       expect(find.byKey(ValueKey('page')), findsOneWidget);
       expect(find.text("My todo list"), findsOneWidget);
       expect(find.text("my task 0"), findsOneWidget);
       expect(find.text("my task 5"), findsOneWidget);
-      expect(presenter.viewModel.todoList.length, 15);
+      expect(presenter.viewModel.todoList?.length, 15);
       expect(presenter, isNotNull);
     });
 

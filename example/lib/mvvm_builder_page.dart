@@ -17,17 +17,17 @@ class MyMvvmPageWithBuilder extends StatelessWidget implements MyViewInterface {
       builder: (context, presenter, model) {
         return Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(title: Text(model?.title ?? "", key: ValueKey("title"),)),
+          appBar: AppBar(title: Text(model.title ?? "", key: ValueKey("title"),)),
           body: ListView.separated(
             itemBuilder: (context, index) => InkWell(
               onTap: () => presenter.onClickItem(index),
               child: ListTile(
-                title: Text(model.todoList[index].title),
-                subtitle: Text(model.todoList[index].subtitle),
+                title: Text(model.todoList![index].title),
+                subtitle: Text(model.todoList![index].subtitle),
               ),
             ),
             separatorBuilder: (context, index) => Divider(height: 1) ,
-            itemCount: model.todoList.length ?? 0
+            itemCount: model.todoList?.length ?? 0
           )
         );
       }
@@ -36,6 +36,6 @@ class MyMvvmPageWithBuilder extends StatelessWidget implements MyViewInterface {
 
   @override
   void showMessage(String message) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
+    _scaffoldKey.currentState?.showSnackBar(new SnackBar(content: Text(message)));
   }
 }

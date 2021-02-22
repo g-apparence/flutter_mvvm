@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:mvvm_builder/mvvm_builder.dart';
 
 
-Route<dynamic> route(RouteSettings settings) {
+Route<dynamic>? route(RouteSettings settings) {
   print("...[call route] ${settings.name}");
 //  switch (settings.name) {
 //    case "/":
@@ -25,12 +24,12 @@ void main() {
 class MyApp extends StatelessWidget implements MyViewInterface{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  final MyPresenter mPresenter = MyPresenter.create(null);
+  late MyPresenter mPresenter;
 
   MyApp() {
     /// must be called to be able to use [MyViewInterface] in our presenter
     /// or simply use MvvmPageBuilder that handle this for you
-    mPresenter.viewInterface = this;
+    this.mPresenter = MyPresenter.create(this);
   }
 
   @override
@@ -38,12 +37,12 @@ class MyApp extends StatelessWidget implements MyViewInterface{
     return MVVMPage<MyPresenter, MyViewModel>(
         builder: (context, presenter, model) {
           var animation = new CurvedAnimation(
-            parent: context.animationController,
+            parent: context.animationController!,
             curve: Curves.easeIn,
           );
           return Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(title: Text(model.title)),
+            appBar: AppBar(title: Text(model.title ?? "")),
             body: ListView.separated(
               itemBuilder: (context, index) => InkWell(
                 onTap: () => presenter.onClickItem(index),
@@ -51,13 +50,13 @@ class MyApp extends StatelessWidget implements MyViewInterface{
                   animation: animation,
                   builder: (context, child) => Opacity(opacity: animation.value, child: child),
                   child: ListTile(
-                    title: Text(model.todoList[index].title, style: TextStyle(color: Colors.black87),),
-                    subtitle: Text(model.todoList[index].subtitle, style: TextStyle(color: Colors.black87)),
+                    title: Text(model.todoList![index].title, style: TextStyle(color: Colors.black87),),
+                    subtitle: Text(model.todoList![index].subtitle, style: TextStyle(color: Colors.black87)),
                   ),
                 ),
               ),
               separatorBuilder: (context, index) => Divider(height: 1) ,
-              itemCount: model.todoList.length
+              itemCount: model.todoList?.length ?? 0
             )
           );
         },
@@ -65,7 +64,7 @@ class MyApp extends StatelessWidget implements MyViewInterface{
         singleAnimControllerBuilder: (tickerProvider) => AnimationController(vsync: tickerProvider, duration: Duration(seconds: 1)),
         animListener: (context, presenter, model) {
           if(model.fadeInAnimation) {
-            context.animationController
+            context.animationController!
               .forward()
               .then((value) => presenter.onFadeInAnimationEnd());
           }
@@ -75,7 +74,7 @@ class MyApp extends StatelessWidget implements MyViewInterface{
 
   @override
   void showMessage(String message) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
+    _scaffoldKey.currentState?.showSnackBar(new SnackBar(content: Text(message)));
   }
 
 }
@@ -98,9 +97,9 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
     this.viewModel.fadeInAnimation = false;
     this.viewModel.show = false;
     this.viewModel.title = "My todo list";
-    this.viewModel.todoList = List();
+    this.viewModel.todoList = [];
     for(int i = 0; i < 15; i++) {
-      this.viewModel.todoList.add(new TodoModel("TODO $i", "my task $i"));
+      this.viewModel.todoList?.add(new TodoModel("TODO $i", "my task $i"));
     }
     this.refreshView();
     // lets show an animation 1 seconds after init
@@ -122,11 +121,11 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
 
 class MyViewModel extends MVVMModel {
-  String title;
-  List<TodoModel> todoList;
+  String? title;
+  List<TodoModel>? todoList;
 
-  bool fadeInAnimation;
-  bool show;
+  late bool fadeInAnimation;
+  late bool show;
 }
 
 class TodoModel {

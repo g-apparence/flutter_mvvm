@@ -9,18 +9,18 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel>
   final T presenter;
 
   /// Method used to build the view corresponding to the presenter
-  final MvvmContentBuilder<T, M> builder;
+  final MvvmContentBuilder<T, M>? builder;
 
   /// Wraps presenter inside a persistent Widget
   const PresenterInherited({
-    Key key,
-    this.presenter,
-    Widget child,
+    Key? key,
+    required this.presenter,
+    required Widget child,
     this.builder,
   }) : super(key: key, child: child);
 
   /// Find the closest PresenterInherited above the current widget
-  static PresenterInherited<T, M> of<T extends Presenter, M extends MVVMModel>(
+  static PresenterInherited<T, M>? of<T extends Presenter, M extends MVVMModel>(
     BuildContext context,
   ) =>
       context.dependOnInheritedWidgetOfExactType<PresenterInherited<T, M>>();
@@ -31,7 +31,7 @@ class PresenterInherited<T extends Presenter, M extends MVVMModel>
 
 /// This class must be overriden too
 abstract class Presenter<T extends MVVMModel, I> {
-  MVVMView _view;
+  MVVMView? _view;
 
   /// Interface defining the exposed methods of the view
   I viewInterface;
@@ -63,5 +63,5 @@ abstract class Presenter<T extends MVVMModel, I> {
 
   /// call this to refresh animations
   /// this will start animations from your animation listener of MvvmBuilder
-  Future<void> refreshAnimations() async => _view?.refreshAnimation();
+  Future<void>? refreshAnimations() async => _view?.refreshAnimation();
 }

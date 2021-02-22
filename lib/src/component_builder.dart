@@ -36,21 +36,19 @@ typedef PresenterBuilder<P extends Presenter> = P Function(
 /// * For multiple, **DO** pass a value in animListener and
 ///   multipleAnimControllerBuilder, **BUT NOT** in singleAnimControllerBuilder
 class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
-  P _presenter;
+  late P _presenter;
+  bool _hasBeenBuilt = false;
 
   Widget build({
-    Key key,
-    @required BuildContext context,
-    @required PresenterBuilder presenterBuilder,
-    @required MvvmContentBuilder<P, M> builder,
-    MvvmAnimationListener<P, M> animListener,
-    MvvmAnimationControllerBuilder singleAnimControllerBuilder,
-    MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
+    Key? key,
+    required BuildContext context,
+    required PresenterBuilder presenterBuilder,
+    required MvvmContentBuilder<P, M> builder,
+    MvvmAnimationListener<P, M>? animListener,
+    MvvmAnimationControllerBuilder? singleAnimControllerBuilder,
+    MvvmAnimationsControllerBuilder? multipleAnimControllerBuilder,
     bool forceRebuild = false,
   }) {
-    assert(context != null, 'Missing context in PageBuilder');
-    assert(presenterBuilder != null, 'Missing presenterBuilder in PageBuilder');
-    assert(builder != null, 'Missing builder in PageBuilder');
     assert(
         ((singleAnimControllerBuilder != null ||
                     multipleAnimControllerBuilder != null) &&
@@ -62,8 +60,9 @@ class MVVMPageBuilder<P extends Presenter, M extends MVVMModel> {
         !(singleAnimControllerBuilder != null &&
             multipleAnimControllerBuilder != null),
         'Cannot have both a single and a multiple animation controller builder.');
-    if (_presenter == null || forceRebuild) {
-      _presenter = presenterBuilder(context);
+    if (!this._hasBeenBuilt || forceRebuild){
+      this._presenter = presenterBuilder(context) as P;
+      this._hasBeenBuilt = true;
     }
 
     Widget content;
@@ -105,20 +104,18 @@ class MVVMPage<P extends Presenter, M extends MVVMModel>
     extends StatelessWidget {
   final P _presenter;
   final MvvmContentBuilder<P, M> _builder;
-  final MvvmAnimationListener<P, M> _animListener;
-  final MvvmAnimationControllerBuilder _singleAnimControllerBuilder;
-  final MvvmAnimationsControllerBuilder _multipleAnimControllerBuilder;
+  final MvvmAnimationListener<P, M>? _animListener;
+  final MvvmAnimationControllerBuilder? _singleAnimControllerBuilder;
+  final MvvmAnimationsControllerBuilder? _multipleAnimControllerBuilder;
 
   const MVVMPage({
-    Key key,
-    @required P presenter,
-    @required MvvmContentBuilder<P, M> builder,
-    MvvmAnimationListener<P, M> animListener,
-    MvvmAnimationControllerBuilder singleAnimControllerBuilder,
-    MvvmAnimationsControllerBuilder multipleAnimControllerBuilder,
-  })  : assert(presenter != null, 'Missing presenter in page'),
-        this._presenter = presenter,
-        assert(builder != null, 'Missing builder in Page'),
+    Key? key,
+    required P presenter,
+    required MvvmContentBuilder<P, M> builder,
+    MvvmAnimationListener<P, M>? animListener,
+    MvvmAnimationControllerBuilder? singleAnimControllerBuilder,
+    MvvmAnimationsControllerBuilder? multipleAnimControllerBuilder,
+  })  : this._presenter = presenter,
         this._builder = builder,
         assert(
             ((singleAnimControllerBuilder != null ||
@@ -177,7 +174,7 @@ abstract class MVVMView {
 
 class MVVMContent<P extends Presenter, M extends MVVMModel>
     extends StatefulWidget {
-  const MVVMContent({Key key}) : super(key: key);
+  const MVVMContent({Key? key}) : super(key: key);
 
   @override
   State<MVVMContent> createState() => _MVVMContentState<P, M>();
@@ -194,15 +191,12 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    assert(presenter != null, "Presenter must be not null");
     presenter.view = this;
     if (!hasInit) {
       hasInit = true;
       presenter.onInit();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context != null) {
-          presenter.afterViewInit();
-        }
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        presenter.afterViewInit();
       });
     }
   }
@@ -228,7 +222,7 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
 
   @override
   Widget build(BuildContext context) =>
-      builder(mvvmContext, presenter, presenter.viewModel);
+      builder!(mvvmContext, presenter, presenter.viewModel as M);
 
   @override
   void forceRefreshView() {
@@ -239,10 +233,10 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
 
   MvvmContext get mvvmContext => MvvmContext(context);
 
-  P get presenter => PresenterInherited.of<P, M>(context).presenter;
+  P get presenter => PresenterInherited.of<P, M>(context)!.presenter;
 
-  MvvmContentBuilder<P, M> get builder =>
-      PresenterInherited.of<P, M>(context).builder;
+  MvvmContentBuilder<P, M>? get builder =>
+      PresenterInherited.of<P, M>(context)!.builder;
 
   @override
   Future<void> refreshAnimation() => throw UnimplementedError();

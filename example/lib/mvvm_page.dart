@@ -12,17 +12,17 @@ class MyMvvmPage extends StatelessWidget implements MyViewInterface {
       builder: (context, presenter, model) {
         return Scaffold(
           key: _scaffoldKey,
-          appBar: AppBar(title: Text(model?.title ?? "", key: ValueKey("title"),)),
+          appBar: AppBar(title: Text(model.title ?? "", key: ValueKey("title"),)),
           body: ListView.separated(
             itemBuilder: (context, index) => InkWell(
               onTap: () => presenter.onClickItem(index),
               child: ListTile(
-                title: Text(model.todoList[index].title),
-                subtitle: Text(model.todoList[index].subtitle),
+                title: Text(model.todoList![index].title),
+                subtitle: Text(model.todoList![index].subtitle),
               ),
             ),
             separatorBuilder: (context, index) => Divider(height: 1) ,
-            itemCount: model.todoList.length ?? 0
+            itemCount: model.todoList?.length ?? 0
           ),
         );
       },
@@ -32,7 +32,7 @@ class MyMvvmPage extends StatelessWidget implements MyViewInterface {
 
   @override
   void showMessage(String message) {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(content: Text(message)));
+    _scaffoldKey.currentState?.showSnackBar(new SnackBar(content: Text(message)));
   }
 }
 
@@ -47,13 +47,13 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
   MyPresenter(MyViewModel model, MyViewInterface myView) : super(model, myView) {
     this.viewModel.title = "My todo list";
-    this.viewModel.todoList = List();
+    this.viewModel.todoList = [];
   }
 
   @override
   Future onInit() async {
     for(int i = 0; i < 15; i++) {
-      this.viewModel.todoList.add(new TodoModel("TODO $i", "my task $i"));
+      this.viewModel.todoList?.add(new TodoModel("TODO $i", "my task $i"));
     }
     this.refreshView();
   }
@@ -65,8 +65,8 @@ class MyPresenter extends Presenter<MyViewModel, MyViewInterface> {
 
 
 class MyViewModel extends MVVMModel {
-  String title;
-  List<TodoModel> todoList;
+  String? title;
+  List<TodoModel>? todoList;
 }
 
 class TodoModel {
