@@ -184,10 +184,6 @@ class _MVVMContentState<P extends Presenter, M extends MVVMModel>
     extends State<MVVMContent> implements MVVMView {
   bool hasInit = false;
 
-  _MVVMContentState() {
-    print("_MVVMContentState");
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
