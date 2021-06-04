@@ -1,3 +1,6 @@
+# 3.0.1-null.safety
+* fix animation beeing rebuild on hot reload
+
 # 3.0.0-null.safety
 * migration of dart (null-safety)
 
